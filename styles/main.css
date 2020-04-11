@@ -1,0 +1,38 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  margin: 0;
+}
+
+.grid-container {
+  height: 700px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.grid {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  height: 700px;
+  width: 700px;
+}
+
+.grid div {
+  border: 1px solid lightgrey;
+
+  align-content: center;
+  flex-grow: 1;
+  height: 3%;
+  width: 3%;
+}
+
+.grid div.snake-head {
+  background-color: pink;
+  border: 1px solid red 
+}
