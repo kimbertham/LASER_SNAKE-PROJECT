@@ -36,3 +36,13 @@ body {
   background-color: pink;
   border: 1px solid red 
 }
+
+.grid div.snake-food {
+  background-color: lightgreen;
+  border: 1px solid green; 
+}
+
+.grid div.test-food {
+  background-color: black;
+  border: 1px solid red; 
+}
