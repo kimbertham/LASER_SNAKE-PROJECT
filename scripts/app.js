@@ -19,7 +19,7 @@ function init() {
       cell.element = document.createElement('div')
       gameGrid.appendChild(cell.element) // store the cell div on the board
       rowArray.push(cell) // add it into a row
-      cell.element.textContent = `${xPosition}, ${yPosition}` // keep track of the coordinates
+      // cell.element.textContent = `${xPosition}, ${yPosition}` // keep track of the coordinates
       cell.element.style.fontSize = '8px' 
     }
     gridArray.push(rowArray) // add row into board
@@ -54,7 +54,7 @@ function init() {
 
     snakeYPosition = Math.floor(height / 2)
     snakeXPosition = Math.floor(width / 2)
-    snakeLength = 5
+    snakeLength = 20
     snakeDirection = 'Up'
 
     
@@ -129,13 +129,18 @@ function init() {
 
     // ------------------------------------------------
 
-
-    // making the game loser is the walls are rouched by making the numbers outside of the width and height accessible for adding a class
+    //LOSIING CONDITIONS
+    // making the game lose if the walls are rouched by making the numbers outside of the width and height accessible for adding a class
     if ( snakeXPosition < 0 || snakeXPosition >= width || snakeYPosition < 0 || snakeYPosition >= height)  {
       console.log('called')
       restartGame()
     }
     //-----------------------
+    //making the game lose if the snake current position is going somewhere where the classlist is already set. i.e can only go somewhere that is 'blank'
+    if (gridArray[snakeYPosition][snakeXPosition].snake > 0){
+      restartGame()
+    }
+    //WINNING CONDITIONS
     // making game win a "point" by collecting food divs and gaining length
     if (gridArray[snakeYPosition][snakeXPosition].food === 1) {
       gridArray[snakeYPosition][snakeXPosition].element.classList.remove('snake-food')
@@ -160,7 +165,7 @@ function init() {
 
     // console.log('loop game')
 
-    const timer = setTimeout(theGame, 500 / snakeLength)
+    const timer = setTimeout(theGame, 500 )
   //gameLoop
   }
   //gameLoop
