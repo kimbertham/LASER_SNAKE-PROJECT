@@ -8,8 +8,8 @@ function init() {
 
   //grid specs 
   const gridArray = []
-  const height = 30
-  const width = 30
+  const height = 23
+  const width = 23
 
  
   for (let yPosition = 0; yPosition < height; yPosition++) { // two loops for height and width
@@ -146,7 +146,7 @@ function init() {
       gridArray[snakeYPosition][snakeXPosition].element.classList.remove('snake-food')
       gridArray[snakeYPosition][snakeXPosition].food = 0
       snakeLength++
-      console.log(snakeLength)
+      // console.log(snakeLength)
       gridArray[snakeYPosition][snakeXPosition].food = 0
       createSnakeFood()
     }
@@ -165,14 +165,22 @@ function init() {
 
     // console.log('loop game')
 
-    const timer = setTimeout(theGame, 200 - (snakeLength * 10) )
-    console.log(215 - snakeLength * 10)
-    if (snakeLength > 16) {
-      console.log('timer up')
-      clearTimeout(timer)
-      setTimeout(theGame, 50)
+
+    const decreaseTen = setTimeout(theGame, 200 - (snakeLength * 10))
+
+    if (snakeLength > 12 && snakeLength < 22) {
+      clearTimeout(decreaseTen)
+      const decreaseTwo = setTimeout(theGame, 100 - (snakeLength * 2))
+      console.log(100 - (snakeLength * 2))
+    } else if (snakeLength > 23) {
+      clearTimeout(decreaseTen)
+      const maxSpeed = setTimeout(theGame, 55)
+      console.log('maxSpeed')
     }
-    
+
+
+
+
   //gameLoop
   }
   //gameLoop

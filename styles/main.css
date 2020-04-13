@@ -19,8 +19,8 @@
   border: 1px solid lightgrey;
   align-content: center;
   flex-grow: 1;
-  height: 3%;
-  width: 3%;
+  height: 4%;
+  width: 4%;
 }
 
 .snake-head {
