@@ -1,198 +1,149 @@
-
 function init() {
 
-  //* grid specs
-  const gridWidth = 33
-  const gridCells = gridWidth * gridWidth
 
 
-  //* DOM 
-  const grid = document.querySelector('.grid')
-  const cellsArray = []
-  let snakeHeadPosition = 510 
- 
-
-
-  //creating gird and putting intial position of snake at 510
-
-  for (let i = 0; i < gridCells; i++) {
-    const cell = { snake: 0
-    }
-    cell.element = document.createElement('div')
-    grid.appendChild(cell.element)
-    cellsArray.push(cell)
-    cell.element.textContent = i
-    cell.element.style.fontSize = '8px'
-
-    // cellsArray[1].element.classList.add('snake-head')
-    console.log(cellsArray)
-  }
-
-
-
-
-  // button to begin initial game loop //
+  //DOM elements
+  const gameGrid = document.querySelector('.grid')
   const startButton = document.querySelector('.start-button')
 
+  //grid specs 
+  const gridArray = []
+  const height = 30
+  const width = 30
 
-  // function to begin game moving snake 
-
-  let foodCount = 0
-
+ 
+  for (let yPosition = 0; yPosition < height; yPosition++) { // two loops for height and width
+    const rowArray = [] // creates 
+    for (let xPosition = 0; xPosition < width; xPosition++){
+      const cell = { snake: 0 } // object to store the snakes specs
+      cell.element = document.createElement('div')
+      gameGrid.appendChild(cell.element) // store the cell div on the board
+      rowArray.push(cell) // add it into a row
+      cell.element.textContent = `${xPosition}, ${yPosition}` // keep track of the coordinates
+      cell.element.style.fontSize = '8px' 
+    }
+    gridArray.push(rowArray) // add row into board
+  }
   
-  //! begining of loop
-
-  function StartTheGame() {
-    console.log('game started')
 
 
-    cellsArray.forEach()
-    function setSnake() {
-      if (cellsArray.cell.snake === 1) {
-        cellsArray.classList.add('snake-head')
+  //! Snake specs
+  let snakeYPosition
+  let snakeXPosition
+  let snakeDirection
+  let snakeLength
+
+
+
+  function restartGame(){
+    for (let yPosition = 0; yPosition < height; yPosition++) { 
+      for (let xPosition = 0; xPosition < width; xPosition++) {
+        gridArray[yPosition][xPosition].snake = 0
       }
-      
     }
+
+    snakeYPosition = Math.floor(height / 2)
+    snakeXPosition = Math.floor(width / 2)
+    snakeLength = 5
+    snakeDirection = 'Up'
+
     
-    // putting food targets down
-    let snakeFood 
-    function snakeFoodInput(){
-      snakeFood = Math.floor(Math.random() * gridCells)
-      cellsArray[snakeFood].classList.add('snake-food')
-    }
-    snakeFoodInput()
+      
+  }
+  restartGame()
 
-    // Will give chosen Value the direction pased on key press direction 
-    let chosenDirection
-    function handleSnakeDirection(event) {
-      chosenDirection = event.key
+
+  function theGame(){
+
+
+    // FUNCTIONING PART OF THE GAME!! HERE LOOP TO MAKE THE SNAKE PRESET, CLASS WILL GET ADDED BASED ON THIS!!!!!! 
+    // GOTTA MANIPULTE THE VARIABLES TO MAKE THE MOVEMENT APPEAR DIFF
+    //! gridArray[yPosition][xPosition] // <------- THE POSITION OF THE SNAKE IS WHATEVER IS FED IN [][]
+
+    for (let yPosition = 0; yPosition < height; yPosition++) { 
+      for (let xPosition = 0; xPosition < width; xPosition++){
+
+        if (gridArray[yPosition][xPosition].snake > 0) {
+          gridArray[yPosition][xPosition].element.classList.add('snake-head') 
+          gridArray[yPosition][xPosition].snake-- // THE NUMVER OF ITERATIONS THE CLASS IS ON THE BOARD FOR, STATING HOW  LONG ITLL MEET THE CONDITION OF THE LOOP AND DECREASE BY ONE ADTER EVERY LOOP INCREMENTALLY, 
+          console.log('loop')
+        } else {
+          gridArray[yPosition][xPosition].element.classList.remove('snake-head') 
+        }
+      }
     }
 
-    //will move the snake in the direction based value asignned by handleSnakePress 
-    function moveSnakeHead() {
-      cellsArray[snakeHeadPosition].classList.remove('snake-head')
-      switch (chosenDirection) {
+
+    // handling the movement of the snake, none of this is called untill triggered by a keyboard event /// ! DEAFULT UP SETTING MOVES
+    function handleDirectionKeys(event) {
+      switch (event.key) {
+        case 'ArrowRight':
+          snakeDirection = 'Right'
+          break
+        case 'ArrowLeft': 
+          snakeDirection = 'Left'
+          break
         case 'ArrowUp':
-          snakeHeadPosition -= gridWidth
+          snakeDirection = 'Up'
           break
         case 'ArrowDown':
-          snakeHeadPosition += gridWidth
+          snakeDirection = 'Down'
           break
-        case 'ArrowRight':
-          snakeHeadPosition++
-          break
-        case 'ArrowLeft':
-          snakeHeadPosition--
-          break
-        default:
-          snakeHeadPosition++ 
       }
-      cellsArray[snakeHeadPosition].classList.add('snake-head') 
-
-
-      if (snakeFood === snakeHeadPosition) {
-        console.log('hi')
-        cellsArray[snakeFood].classList.remove('snake-food')
-        foodCount++
-        console.log(foodCount)
-        cellsArray[snakeHeadPosition].style.width = '4%'
-        snakeFoodInput()
-      }
-
-
+      console.log('working')
     }
+    switch (snakeDirection) {
+      case 'Right' :
+        snakeXPosition++
+        break
+      case 'Left' :
+        snakeXPosition--
+        break
+      case 'Up' : 
+        snakeYPosition--
+        break
+      case 'Down': 
+        snakeYPosition++
+        break
+    }
+    document.addEventListener('keyup', handleDirectionKeys)
+    
 
-    const timedSnakeMovement = setInterval(
-      function() {
-        moveSnakeHead()
-      }, 150)
+    // ------------------------------------------------
 
 
-      
+    // making the game loser is the walls are rouched by making the numbers outside of the width and height accessible for adding a class
+    if ( snakeXPosition < 0 || snakeXPosition >= width || snakeYPosition < 0 || snakeYPosition >= height)  {
+      console.log('called')
+      restartGame()
+    }
+    //-----------------------
 
-      
-    // switch (chosenDirection) {
-    //   case 'ArrowUp':
-    //     snakeFood -= gridWidth 
-    //     console.log( snakeFood + ' ' + snakeHeadPosition)
-    //     break
-    //   case 'ArrowDown':
-    //     snakeFood += gridWidth
-    //     console.log( snakeFood + ' ' + snakeHeadPosition)
-    //     break
-    //   case 'ArrowRight':
-    //     snakeFood++
-    //     console.log( snakeFood + ' ' + snakeHeadPosition)
-    //     break
-    //   case 'ArrowLeft':
-    //     snakeFood--
-    //     console.log( snakeFood + ' ' + snakeHeadPosition)
-    //     break
-    //   default:
-    //     snakeFood++ 
-    // }
-    //   cellsArray[snakeFood].classList.add('snake-head') 
-    //   snakeFoodInput()
-    // }
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    document.addEventListener('keyup', handleSnakeDirection)
-    //gameloop
+    
+    // HERE!!!! would be where the first.. " viewable active moment of the game starts" !!!!! 
+
+    gridArray[snakeYPosition][snakeXPosition].snake = snakeLength
+    // console.log( `${[snakeYPosition]} ${[snakeXPosition]}.snake = ${snakeLength}`)
+
+
+
+
+    // console.log('loop game')
+
+    const timer = setTimeout(theGame, 500 / snakeLength)
+  //gameLoop
   }
-  //gameloop
-      
-      
-  startButton.addEventListener('click', StartTheGame)
-      
-      
-      
-      
-      
-  // if () {
-  // playAgain = true
-  // } else {
-  //   playAgain = false)
-  // }
-  //   } while (playAgain)
-  // } 
-          
-          
-          
-  // //?---------check index position---------- //
-          
-  // function clickedPosition(event) {
-  //   console.log(cellsArray.indexOf(event.target))
-  // }
-          
-  // cellsArray.forEach(cell => {
-  //   cell.addEventListener('click', clickedPosition)
-  // })
-  // //? ---------------------------------------/
+  //gameLoop
+  
+  
+
+
+
+
+  startButton.addEventListener('click', theGame )
+
+
+
+
 }
-        
-window.addEventListener('DOMContentLoaded', init)
-
-
-
-
-        
-// you dont need to create any new divs or appendy divs becayse there is
-// no actual movement within the page. The tail will grow by increasin the number of classlists seeming to appear following the main
+window.addEventListener('DOMContentLoaded' , init)
