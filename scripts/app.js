@@ -28,13 +28,34 @@ function init() {
 
   function createSnakeFood(){
 
-    const appleXPosition = Math.floor(Math.random() * width )
-    const appleYPosition = Math.floor(Math.random() * height)
+    let foodXPosition
+    let foodYPosition
 
-    gridArray[appleXPosition][appleYPosition].food = 1
+    foodXPosition = Math.floor(Math.random() * width)
+    foodYPosition = Math.floor(Math.random() * height)
+
+    gridArray[foodYPosition][foodXPosition].food = 1
+    
+    for (let yPosition = 0; yPosition < height; yPosition++) { 
+      for (let xPosition = 0; xPosition < width; xPosition++){
+
+        if (gridArray[foodYPosition][foodXPosition].element.classList.contains('snake-head')) {
+          gridArray[foodYPosition][foodXPosition].food = 0
+          foodXPosition = Math.floor(Math.random() * width)
+          foodYPosition = Math.floor(Math.random() * height)
+
+          gridArray[foodYPosition][foodXPosition].food = 1
+          console.log('cant be placed, moved')
+        }  // Loops through the arrays to check if the food put down already has a class of SNAKE so food has to placed on a white classless div
+      }
+    }
+    
     // apple is placed randomy on the board by generating random numbers for array indexes
-    // console.log(`${appleXPosition}${appleYPosition}`)
+    // console.log(`${appleXPosition}${foodYPosition}`)
   }
+
+
+
 
 
   //! Snake specs
@@ -165,18 +186,18 @@ function init() {
 
     // console.log('loop game')
 
+    const decreaseTen = setTimeout(theGame, 100)
+    // const decreaseTen = setTimeout(theGame, 200 - (snakeLength * 10))
 
-    const decreaseTen = setTimeout(theGame, 200 - (snakeLength * 10))
-
-    if (snakeLength > 12 && snakeLength < 22) {
-      clearTimeout(decreaseTen)
-      const decreaseTwo = setTimeout(theGame, 100 - (snakeLength * 2))
-      console.log(100 - (snakeLength * 2))
-    } else if (snakeLength > 23) {
-      clearTimeout(decreaseTen)
-      const maxSpeed = setTimeout(theGame, 55)
-      console.log('maxSpeed')
-    }
+    // if (snakeLength > 7 && snakeLength < 9) {
+    //   clearTimeout(decreaseTen)
+    //   const decreaseTwo = setTimeout(theGame, 100 - (snakeLength * 2))
+    //   console.log(100 - (snakeLength * 2))
+    // } else if (snakeLength > 11) {
+    //   clearTimeout(decreaseTen)
+    //   const maxSpeed = setTimeout(theGame, 55)
+    //   console.log('maxSpeed')
+    // }
 
 
 
