@@ -34,7 +34,6 @@ function init() {
   let snakeLength
 
 
-
   function restartGame(){
     for (let yPosition = 0; yPosition < height; yPosition++) { 
       for (let xPosition = 0; xPosition < width; xPosition++) {
@@ -52,6 +51,15 @@ function init() {
   }
   restartGame()
 
+  //snake food 
+
+  function createSnakeFood() {
+
+    const appleXPosition = Math.floor(Math.random() * width)
+    const appleYPosition = Math.floor(Math.random() * height)
+
+    gridArray[appleXPosition][appleYPosition] = 1 // apple is placed randomy on the board by generating random numbers for array indexes
+  }
 
   function theGame(){
 
@@ -119,13 +127,17 @@ function init() {
     }
     //-----------------------
 
+
+
+
+
     
     // HERE!!!! would be where the first.. " viewable active moment of the game starts" !!!!! 
 
     gridArray[snakeYPosition][snakeXPosition].snake = snakeLength
     // console.log( `${[snakeYPosition]} ${[snakeXPosition]}.snake = ${snakeLength}`)
-
-
+    createSnakeFood()
+    // CREATES SNAKE FOOD JUST AFTER THE SNAKE IS PUT DOWN THE BOARD!!!
 
 
     // console.log('loop game')
