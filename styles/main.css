@@ -27,3 +27,9 @@
     background-color: pink;
     border: 1px solid red 
   }
+
+  .snake-food {
+      background-color: lightgreen;
+      border: 1px solid green;
+    }
+  
