@@ -28,12 +28,12 @@ function init() {
 
   function createSnakeFood(){
 
-    const appleXPosition = Math.floor(Math.random() * width)
+    const appleXPosition = Math.floor(Math.random() * width )
     const appleYPosition = Math.floor(Math.random() * height)
 
     gridArray[appleXPosition][appleYPosition].food = 1
     // apple is placed randomy on the board by generating random numbers for array indexes
-    console.log(`${appleXPosition}${appleYPosition}`)
+    // console.log(`${appleXPosition}${appleYPosition}`)
   }
 
 
@@ -54,7 +54,7 @@ function init() {
 
     snakeYPosition = Math.floor(height / 2)
     snakeXPosition = Math.floor(width / 2)
-    snakeLength = 20
+    snakeLength = 5
     snakeDirection = 'Up'
 
     
@@ -80,7 +80,7 @@ function init() {
         if (gridArray[yPosition][xPosition].snake > 0) {
           gridArray[yPosition][xPosition].element.classList.add('snake-head') 
           gridArray[yPosition][xPosition].snake-- // THE NUMVER OF ITERATIONS THE CLASS IS ON THE BOARD FOR, STATING HOW  LONG ITLL MEET THE CONDITION OF THE LOOP AND DECREASE BY ONE ADTER EVERY LOOP INCREMENTALLY, 
-          console.log('loop')
+          // console.log('loop')
         } else if (gridArray[yPosition][xPosition].food === 1) {
           gridArray[yPosition][xPosition].element.classList.add('snake-food')
         } else {
@@ -108,7 +108,7 @@ function init() {
           snakeDirection = 'Down'
           break
       }
-      console.log('working')
+      // console.log('working')
     }
     switch (snakeDirection) {
       case 'Right' :
@@ -132,7 +132,7 @@ function init() {
     //LOSIING CONDITIONS
     // making the game lose if the walls are rouched by making the numbers outside of the width and height accessible for adding a class
     if ( snakeXPosition < 0 || snakeXPosition >= width || snakeYPosition < 0 || snakeYPosition >= height)  {
-      console.log('called')
+      // console.log('called')
       restartGame()
     }
     //-----------------------
@@ -145,8 +145,8 @@ function init() {
     if (gridArray[snakeYPosition][snakeXPosition].food === 1) {
       gridArray[snakeYPosition][snakeXPosition].element.classList.remove('snake-food')
       gridArray[snakeYPosition][snakeXPosition].food = 0
-      console.log('food collected')
       snakeLength++
+      console.log(snakeLength)
       gridArray[snakeYPosition][snakeXPosition].food = 0
       createSnakeFood()
     }
@@ -165,7 +165,14 @@ function init() {
 
     // console.log('loop game')
 
-    const timer = setTimeout(theGame, 500 )
+    const timer = setTimeout(theGame, 200 - (snakeLength * 10) )
+    console.log(215 - snakeLength * 10)
+    if (snakeLength > 16) {
+      console.log('timer up')
+      clearTimeout(timer)
+      setTimeout(theGame, 50)
+    }
+    
   //gameLoop
   }
   //gameLoop
