@@ -71,7 +71,8 @@ function init() {
 
     // FUNCTIONING PART OF THE GAME!! HERE LOOP TO MAKE THE SNAKE PRESET, CLASS WILL GET ADDED BASED ON THIS!!!!!! 
     // GOTTA MANIPULTE THE VARIABLES TO MAKE THE MOVEMENT APPEAR DIFF
-    //! gridArray[yPosition][xPosition] // <------- THE POSITION OF THE SNAKE IS WHATEVER IS FED IN [][]
+    //! gridArray[yPosition][xPosition ] <------- (LOOP - LOCAL TO LOOP) THE POSITION OF THE SNAKE IS WHATEVER IS FED IN [][] 
+    //! gridArray[snakeXPosition][snakeYPosition] // <------- (GAME - LOCAL TO FUNCTION) THE POSITION OF THE SNAKE IS WHATEVER IS FED IN [][]
 
     for (let yPosition = 0; yPosition < height; yPosition++) { 
       for (let xPosition = 0; xPosition < width; xPosition++){
@@ -135,6 +136,15 @@ function init() {
       restartGame()
     }
     //-----------------------
+    // making game win a "point" by collecting food divs and gaining length
+    if (gridArray[snakeYPosition][snakeXPosition].food === 1) {
+      gridArray[snakeYPosition][snakeXPosition].element.classList.remove('snake-food')
+      gridArray[snakeYPosition][snakeXPosition].food = 0
+      console.log('food collected')
+      snakeLength++
+      gridArray[snakeYPosition][snakeXPosition].food = 0
+      createSnakeFood()
+    }
 
 
 
@@ -143,7 +153,7 @@ function init() {
     
     // HERE!!!! would be where the first.. " viewable active moment of the game starts" !!!!! 
     gridArray[snakeYPosition][snakeXPosition].snake = snakeLength
-    console.log( `${[snakeYPosition]} ${[snakeXPosition]}.snake = ${snakeLength}`)
+    // console.log( `${[snakeYPosition]} ${[snakeXPosition]}.snake = ${snakeLength}`)
 
 
 
