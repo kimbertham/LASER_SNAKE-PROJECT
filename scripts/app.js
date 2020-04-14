@@ -21,6 +21,7 @@ function init() {
   let snakeDirection
   let snakeLength
   let scoreUpdate
+  let laserPosition
 
   function randomNum(){
     return (Math.floor(Math.random() * width))
@@ -29,7 +30,7 @@ function init() {
   for (let yPosition = 0; yPosition < height; yPosition++) { // two loops for height and width
     const rowArray = [] // creates 
     for (let xPosition = 0; xPosition < width; xPosition++){
-      const cell = { snake: 0, food: 0, trap: 0 } // object to store the snakes specs
+      const cell = { snake: 0, food: 0, trap: 0, laser: 0 } // object to store the snakes specs
       cell.element = document.createElement('div')
       gameGrid.appendChild(cell.element) // store the cell div on the board
       rowArray.push(cell) // add it into a row
@@ -89,9 +90,6 @@ function init() {
     }
   }
 
-
-
-
   function updatingScore(){
     score.textContent = scoreUpdate
   }
@@ -113,6 +111,7 @@ function init() {
       for (let xPosition = 0; xPosition < width; xPosition++) {
         gridArray[yPosition][xPosition].element.classList.remove('snake-head')    
         gridArray[yPosition][xPosition].element.classList.remove('snake-food') 
+        gridArray[yPosition][xPosition].element.classList.remove('laser')
       }
     }
     gameGrid.id = 'dead-screen'
@@ -131,6 +130,8 @@ function init() {
         gridArray[yPosition][xPosition].snake = 0
         gridArray[yPosition][xPosition].food = 0
         gridArray[yPosition][xPosition].trap = 0
+        gridArray[yPosition][xPosition].laser = 0
+
       }
     }
 
@@ -147,8 +148,6 @@ function init() {
     createSnakeFood()
     creatingSnakeTraps()
     theGame()
-
-
   }
 
   //snake food 
@@ -174,7 +173,8 @@ function init() {
         } else {
           gridArray[yPosition][xPosition].element.classList.remove('snake-head')    ///  REMOVES THE CLASS IF THE SNAKE
           gridArray[yPosition][xPosition].element.classList.remove('snake-food')
-          gridArray[yPosition][xPosition].element.classList.remove('snake-trap')     // OR SNAKE FOOD IS NOT AT POSITION INDEX
+          gridArray[yPosition][xPosition].element.classList.remove('snake-trap')
+          gridArray[yPosition][xPosition].element.classList.remove('laser')     // OR SNAKE FOOD IS NOT AT POSITION INDEX
         }
       }
     }
@@ -198,7 +198,6 @@ function init() {
           snakeDirection = 'Down'
           break
       }
-
     }
     switch (snakeDirection) {
       case 'Right' :
@@ -219,12 +218,44 @@ function init() {
 
     // ------------------------------------------------
 
+    function handleSnakeGun(event) {
+      if (event.code === 'Space' ) {
+
+        switch (snakeDirection) {
+          case 'Right' : laserPosition = gridArray[snakeYPosition][snakeXPosition + 1]
+            break
+          case 'Left' : laserPosition = gridArray[snakeYPosition][snakeXPosition - 1]
+            break
+          case 'Up' :  laserPosition = gridArray[snakeYPosition - 1][snakeXPosition]
+            break
+          case 'Down' :laserPosition = gridArray[snakeYPosition + 1][snakeXPosition] 
+            break
+        }
+
+        laserPosition.element.classList.add('laser')
+        console.log('laser-read')
+        
+
+      }
+    }
+    document.addEventListener('keydown', handleSnakeGun)
+
+    // function snakeGun() {
+    //   switch (snakeDirection) {
+    //     case 'Right' : laserPosition = gridArray[snakeYPosition][snakeXPosition++ ]
+    //       break
+    //     case 'Left' : laserPosition = gridArray[snakeYPosition][snakeXPosition--]
+    //       break
+    //     case 'Up' :  laserPosition = gridArray[snakeYPosition--][snakeXPosition]
+    //       break
+    //     case 'Down' :laserPosition = gridArray[snakeYPosition++][snakeXPosition] 
+    //       break
+    //   }
+    // }
 
 
 
 
-
-    
 
     //!LOSIING CONDITIONS
     // making the game lose if the walls are rouched by making the numbers outside of the width and height accessible for adding a class
@@ -283,6 +314,7 @@ function init() {
   
   
   startButton.addEventListener('click', restartGame)
+
 
 
 }
