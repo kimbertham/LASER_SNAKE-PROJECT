@@ -50,7 +50,8 @@ function init() {
     // Loops through the arrays to check if the food put down already has a class of SNAKE so food has to placed on a white classless div
     for (let yPosition = 0; yPosition < height; yPosition++) { 
       for (let xPosition = 0; xPosition < width; xPosition++){
-        if (gridArray[foodYPosition][foodXPosition].element.classList.contains('snake-head')) {
+        if (gridArray[foodYPosition][foodXPosition].element.classList.contains('snake-head') ||
+        gridArray[foodYPosition][foodXPosition].element.classList.contains('doors')) {
           gridArray[foodYPosition][foodXPosition].food = 0
           foodXPosition = randomNum()
           foodYPosition = randomNum()
@@ -75,11 +76,14 @@ function init() {
     const trapXPosition = randomNum()
     const trapYPosition = randomNum()
 
+    
+
     for (let yPosition = 0; yPosition < height; yPosition++) { 
       for (let xPosition = 0; xPosition < width; xPosition++){
         if (gridArray[yPosition][yPosition].element.classList.contains('snake-head') || 
-        gridArray[yPosition][yPosition].element.classList.contains('snake-food')) {
-          gridArray[trapYPosition][trapXPosition].trap = 0
+        gridArray[yPosition][xPosition].element.classList.contains('snake-food') ||
+        gridArray[yPosition][xPosition].element.classList.contains('doors')) {
+          gridArray[yPosition][xPosition].trap = 0
           console.log('cant plae here, generate new')
           const trapXPosition = randomNum()
           const trapYPosition = randomNum()
@@ -89,11 +93,15 @@ function init() {
     }
   }
 
+
+  // Creating Laser variables --------------------------
+
   let laserPosition
   let laserDirection
   let laserXPos
   let laserYPos
-
+  let laserTimer 
+  
   function handleLaserPosition(event){
     if (event.code === 'Space') {
       switch (snakeDirection) {
@@ -122,41 +130,44 @@ function init() {
       }
       laserMove()
     }
+  }
 
-    function laserMove() {
 
-      console.log('hi')
-   
-    
-      switch (laserDirection) {
-        case 'Right':
-          laserXPos++
-          console.log(`${laserXPos} ${laserYPos}`)
+  function laserMove() {
+
+    switch (laserDirection) {
+      case 'Right':
+        laserXPos++
+        console.log(`${laserXPos} ${laserYPos}`)
           
-          break
-        case 'Left' :
-          laserXPos--
-          break
-        case 'Up' : 
-          laserYPos--
-          break
-        case 'Down': 
-          laserYPos++
-          break
-      }
-      gridArray[laserYPos][laserXPos].laser = 1
+        break
+      case 'Left' :
+        laserXPos--
+        break
+      case 'Up' : 
+        laserYPos--
+        break
+      case 'Down': 
+        laserYPos++
+        break
+    }
+    gridArray[laserYPos][laserXPos].laser = 1
       
-      if (gridArray[laserYPos][laserXPos].trap > 0) {
-        console.log('got one')
-        gridArray[laserYPos][laserXPos].trap = 0
-      }
+    function beginLaser() {
+      laserTimer = setTimeout(laserMove, 50)
+    }
+    beginLaser()
 
-      if ( laserXPos < 0 || laserXPos >= width || laserYPos < 0 || laserYPos >=  height )  {
-        clearTimeout(laserTimer)
-      }
-      const laserTimer = setTimeout(laserMove, 50)
+    if (gridArray[laserYPos][laserXPos].trap > 0) {
+      console.log('got one')
+      gridArray[laserYPos][laserXPos].trap = 0
+    } 
+    if ( laserXPos < 0 || laserXPos >= width || laserYPos < 0 || laserYPos >=  height )  {
+      clearTimeout(laserTimer)
     }
   }
+
+  
 
 
   function updatingScore(){
@@ -171,10 +182,15 @@ function init() {
     highScoreSpan.textContent = highScore
   }
 
+
+  // Death screen ------------------------
+
+
   function deadScreen() {
     
     console.log('dead')
     clearTimeout(trapTimer)
+    clearTimeout(laserTimer)
 
     for (let yPosition = 0; yPosition < height; yPosition++) { 
       for (let xPosition = 0; xPosition < width; xPosition++) {
@@ -191,6 +207,7 @@ function init() {
 
   }
   
+  //Restarting game -----------------------------------------
 
   function restartGame(){
 
@@ -204,10 +221,10 @@ function init() {
       }
     }
 
+    startButton.style.display = 'none'
     gameGrid.removeAttribute('id')
     gameGrid.classList.add('grid')
     deadButton.style.display = 'none'
-
     snakeYPosition = Math.floor(height / 2)
     snakeXPosition = Math.floor(width / 2)
     snakeLength = 5
@@ -219,8 +236,28 @@ function init() {
     theGame()
   }
 
-  //snake food 
+  const doors = 'Closed'
 
+
+  function slidingDoors() {
+    
+    if (doors === 'Closed'){
+      for (let yPosition = 0; yPosition < height; yPosition++) { 
+        for (let xPosition = 0; xPosition < width; xPosition++) {
+          if ( xPosition < 2   || yPosition < 2 || xPosition > 20 || yPosition > 20  ) {
+            gridArray[xPosition][yPosition].element.classList.add('doors')
+            gridArray[xPosition][yPosition].element.classList.remove('snake-trap')
+            gridArray[xPosition][yPosition].element.classList.remove('snakee-food')
+
+          }
+        }
+      }
+    }
+  }
+  
+  slidingDoors()
+  
+  
 
   function theGame(){
     // FUNCTIONING PART OF THE GAME!! HERE LOOP TO MAKE THE SNAKE PRESET, CLASS WILL GET ADDED BASED ON THIS!!!!!! 
@@ -252,8 +289,8 @@ function init() {
     }
     
     
-
-
+    const decreaseTen = setTimeout(theGame, 100)
+    
     
     // handling the movement of the snake, none of this is called untill triggered by a keyboard event /// ! DEAFULT UP SETTING MOVES
   
@@ -321,6 +358,10 @@ function init() {
     } else if (gridArray[snakeYPosition][snakeXPosition].trap > 0) {
       updatingHighScore()
       deadScreen()
+    } else if ( doors === 'Closed' &&  snakeXPosition < 2 || snakeYPosition < 2 || snakeXPosition > 20 || snakeYPosition > 20  ) {
+      clearTimeout(decreaseTen)
+      updatingHighScore()
+      deadScreen()
     }
   
 
@@ -339,10 +380,6 @@ function init() {
     gridArray[snakeYPosition][snakeXPosition].snake = snakeLength
     // console.log( `${[snakeYPosition]} ${[snakeXPosition]}.snake = ${snakeLength}`)
 
-    
-
-
-
 
     // const decreaseTen = setTimeout(theGame, 200 - (snakeLength * 10))
 
@@ -358,7 +395,7 @@ function init() {
 
 
 
-    const decreaseTen = setTimeout(theGame, 100)
+    
     
   //gameLoop
   }
