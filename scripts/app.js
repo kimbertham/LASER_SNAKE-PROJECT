@@ -7,9 +7,11 @@ function init() {
   const startButton = document.querySelector('.start-button')
   const score = document.querySelector('.score')
   const deadButton = document.querySelector('.dead-button')
+  const highScoreSpan = document.querySelector('.high-score')
 
   //grid specs 
   const gridArray = []
+  const highScoreArray = []
   const height = 23
   const width = 23
 
@@ -28,65 +30,50 @@ function init() {
   }
   
 
+  function randomNum(){
+    return (Math.floor(Math.random() * width))
+  }
+
   function createSnakeFood(){
 
-    // apple is placed randomy on the board by generating random numbers for array indexes
+    // food is placed randomy on the board by generating random numbers for array indexes
 
-    let foodXPosition = Math.floor(Math.random() * width)
-    let foodYPosition = Math.floor(Math.random() * height)
-
-    gridArray[foodYPosition][foodXPosition].food = 1
-    // console.log(`${appleXPosition}${foodYPosition}`)
-
-    
-    // Loops through the arrays to check if the food put down already has a class of SNAKE so food has to placed on a white classless div
-  
-    for (let yPosition = 0; yPosition < height; yPosition++) { 
-      for (let xPosition = 0; xPosition < width; xPosition++){
-
-        if (gridArray[foodYPosition][foodXPosition].element.classList.contains('snake-head')) {
-          gridArray[foodYPosition][foodXPosition].food = 0
-          foodXPosition = Math.floor(Math.random() * width)
-          foodYPosition = Math.floor(Math.random() * height)
-          console.log('cant be placed, generate new')
-          gridArray[foodYPosition][foodXPosition].food = 1
-        } 
-      }
-    
-    }
-  }
-
-  function createSnakeTraps(){
-
-    // apple is placed randomy on the board by generating random numbers for array indexes
-
-    let foodXPosition = Math.floor(Math.random() * width)
-    let foodYPosition = Math.floor(Math.random() * height)
+    let foodXPosition = randomNum()
+    let foodYPosition = randomNum()
 
     gridArray[foodYPosition][foodXPosition].food = 1
     // console.log(`${appleXPosition}${foodYPosition}`)
 
-    
     // Loops through the arrays to check if the food put down already has a class of SNAKE so food has to placed on a white classless div
   
     for (let yPosition = 0; yPosition < height; yPosition++) { 
       for (let xPosition = 0; xPosition < width; xPosition++){
-
         if (gridArray[foodYPosition][foodXPosition].element.classList.contains('snake-head')) {
           gridArray[foodYPosition][foodXPosition].food = 0
-          foodXPosition = Math.floor(Math.random() * width)
-          foodYPosition = Math.floor(Math.random() * height)
+          foodXPosition = randomNum()
+          foodYPosition = randomNum()
           console.log('cant be placed, generate new')
           gridArray[foodYPosition][foodXPosition].food = 1
-        } 
+        }
       }
-    
     }
   }
+
 
   function updatingScore(){
     score.textContent = scoreUpdate
   }
+  //=------------
+
+  function updatingHighScore(){
+    
+    highScoreArray.push(scoreUpdate)
+    const highScore = Math.max.apply(null,highScoreArray)
+    console.log(highScore)
+    console.log(highScoreArray)
+    highScoreSpan.textContent = highScore
+  }
+
 
   //! Snake specs
   let snakeYPosition
@@ -94,6 +81,7 @@ function init() {
   let snakeDirection
   let snakeLength
   let scoreUpdate
+  
 
   function deadScreen() {
     console.log('working')
@@ -210,11 +198,15 @@ function init() {
     // making the game lose if the walls are rouched by making the numbers outside of the width and height accessible for adding a class
     if ( snakeXPosition < 0 || snakeXPosition >= width || snakeYPosition < 0 || snakeYPosition >= height)  {
       // console.log('called')
+      updatingHighScore()
       deadScreen()
     }
     //-----------------------
     //making the game lose if the snake current position is going somewhere where the classlist is already set. i.e can only go somewhere that is 'blank'
+
     if (gridArray[snakeYPosition][snakeXPosition].snake > 0){
+
+      updatingHighScore()
       deadScreen()
     }
     //WINNING CONDITIONS
@@ -231,7 +223,7 @@ function init() {
     
     // HERE!!!! would be where the first.. " viewable active moment of the game starts" !!!!! 
     gridArray[snakeYPosition][snakeXPosition].snake = snakeLength
-    // console.log( `${[snakeYPosition]} ${[snakeXPosition]}.snake = ${snakeLength}`)
+    console.log( `${[snakeYPosition]} ${[snakeXPosition]}.snake = ${snakeLength}`)
 
     
 
