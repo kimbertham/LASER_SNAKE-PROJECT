@@ -145,13 +145,19 @@ function init() {
           break
       }
       gridArray[laserYPos][laserXPos].laser = 1
+      
+      if (gridArray[laserYPos][laserXPos].trap > 0) {
+        console.log('got one')
+        gridArray[laserYPos][laserXPos].trap = 0
+      }
 
-
-      const laserTimer = setTimeout(laserMove, 100)
-
+      if ( laserXPos < 0 || laserXPos >= width || laserYPos < 0 || laserYPos >=  height )  {
+        clearTimeout(laserTimer)
+      }
+      const laserTimer = setTimeout(laserMove, 50)
     }
   }
-    
+
 
   function updatingScore(){
     score.textContent = scoreUpdate
@@ -226,7 +232,6 @@ function init() {
       for (let xPosition = 0; xPosition < width; xPosition++){
 
         if (gridArray[yPosition][xPosition].snake > 0) {
-          gridArray[yPosition][xPosition].element.classList.remove('laser') 
           gridArray[yPosition][xPosition].element.classList.add('snake-head') 
           gridArray[yPosition][xPosition].snake-- // THE NUMVER OF ITERATIONS THE CLASS IS ON THE BOARD FOR, STATING HOW  LONG ITLL MEET THE CONDITION OF THE LOOP AND DECREASE BY ONE ADTER EVERY LOOP INCREMENTALLY,
         } else if (gridArray[yPosition][xPosition].food === 1) {
@@ -307,7 +312,7 @@ function init() {
     
     //!LOSIING CONDITIONS
     // making the game lose if the walls are rouched by making the numbers outside of the width and height accessible for adding a class
-    if ( snakeXPosition < 0 || snakeXPosition >= width - 1 || snakeYPosition < 0 || snakeYPosition >= height - 1)  {
+    if ( snakeXPosition < 0 || snakeXPosition >= width || snakeYPosition < 0 || snakeYPosition >= height)  {
       updatingHighScore()
       deadScreen()
     } else if (gridArray[snakeYPosition][snakeXPosition].snake > 0){
