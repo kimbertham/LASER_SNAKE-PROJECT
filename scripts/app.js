@@ -62,29 +62,32 @@ function init() {
   }
   ///---------------- creating snake traps
 
-
-
+  let trapTimer
 
   function creatingSnakeTraps() {
     console.log('being read')
- 
+    
+    function beginTraps() {
+      trapTimer = setTimeout(creatingSnakeTraps, 30000)
+    }
+    beginTraps()
+
     const trapXPosition = randomNum()
     const trapYPosition = randomNum()
 
     for (let yPosition = 0; yPosition < height; yPosition++) { 
       for (let xPosition = 0; xPosition < width; xPosition++){
-        if (gridArray[xPosition][yPosition].snake < 0 && gridArray[xPosition][yPosition].food < 0 ) {
+        if (gridArray[yPosition][yPosition].element.classList.contains('snake-head') || 
+        gridArray[yPosition][yPosition].element.classList.contains('snake-food')) {
           gridArray[trapYPosition][trapXPosition].trap = 0
+          console.log('cant plae here, generate new')
           const trapXPosition = randomNum()
           const trapYPosition = randomNum()
         } else 
           gridArray[trapYPosition][trapXPosition].trap = 1
       }
     }
-    const trapTimer = setTimeout(creatingSnakeTraps, 30000 - (snakeLength * 10))
   }
-
-  
 
 
 
@@ -102,8 +105,9 @@ function init() {
   }
 
   function deadScreen() {
-    console.log('working')
-    gameGrid.id = 'dead-screen'
+    
+    console.log('dead')
+    clearTimeout(trapTimer)
 
     for (let yPosition = 0; yPosition < height; yPosition++) { 
       for (let xPosition = 0; xPosition < width; xPosition++) {
@@ -121,6 +125,7 @@ function init() {
   
 
   function restartGame(){
+
     for (let yPosition = 0; yPosition < height; yPosition++) { 
       for (let xPosition = 0; xPosition < width; xPosition++) {
         gridArray[yPosition][xPosition].snake = 0
@@ -142,14 +147,14 @@ function init() {
     createSnakeFood()
     creatingSnakeTraps()
     theGame()
+
+
   }
 
   //snake food 
 
 
   function theGame(){
-
-
     // FUNCTIONING PART OF THE GAME!! HERE LOOP TO MAKE THE SNAKE PRESET, CLASS WILL GET ADDED BASED ON THIS!!!!!! 
     // GOTTA MANIPULTE THE VARIABLES TO MAKE THE MOVEMENT APPEAR DIFF
     //! gridArray[yPosition][xPosition ] <------- (LOOP - LOCAL TO LOOP) THE POSITION OF THE SNAKE IS WHATEVER IS FED IN [][] 
@@ -214,21 +219,28 @@ function init() {
 
     // ------------------------------------------------
 
-    //LOSIING CONDITIONS
+
+
+
+
+
+    
+
+    //!LOSIING CONDITIONS
     // making the game lose if the walls are rouched by making the numbers outside of the width and height accessible for adding a class
     if ( snakeXPosition < 0 || snakeXPosition >= width || snakeYPosition < 0 || snakeYPosition >= height)  {
       updatingHighScore()
       deadScreen()
-    }
-    //-----------------------
-    //making the game lose if the snake current position is going somewhere where the classlist is already set. i.e can only go somewhere that is 'blank'
-
-    if (gridArray[snakeYPosition][snakeXPosition].snake > 0){
-
+    } else if (gridArray[snakeYPosition][snakeXPosition].snake > 0){
+      updatingHighScore()
+      deadScreen()    //making the game lose if the snake current position is going somewhere where the classlist is already set. i.e can only go somewhere that is 'blank'
+    } else if (gridArray[snakeYPosition][snakeXPosition].trap > 0) {
       updatingHighScore()
       deadScreen()
     }
-    //WINNING CONDITIONS
+  
+
+    // !WINNING CONDITIONS
     // making game win a "point" by collecting food divs and gaining length
     if (gridArray[snakeYPosition][snakeXPosition].food === 1) {
       gridArray[snakeYPosition][snakeXPosition].element.classList.remove('snake-food')
@@ -248,7 +260,7 @@ function init() {
 
 
 
-    const decreaseTen = setTimeout(theGame, 100)
+
     // const decreaseTen = setTimeout(theGame, 200 - (snakeLength * 10))
 
     // if (snakeLength > 7 && snakeLength < 9) {
@@ -263,7 +275,8 @@ function init() {
 
 
 
-
+    const decreaseTen = setTimeout(theGame, 100)
+    
   //gameLoop
   }
   //gameLoop
