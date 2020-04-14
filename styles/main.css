@@ -58,3 +58,8 @@
     margin: 0 auto;
     margin-top: 50%;
   }
+
+  .snake-trap {
+  background-color: black;
+  border: 1px solid red; 
+  }
