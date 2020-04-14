@@ -5,6 +5,8 @@ function init() {
   //DOM elements
   const gameGrid = document.querySelector('.grid')
   const startButton = document.querySelector('.start-button')
+  const score = document.querySelector('.score')
+  const deadButton = document.querySelector('.dead-button')
 
   //grid specs 
   const gridArray = []
@@ -28,14 +30,17 @@ function init() {
 
   function createSnakeFood(){
 
-    let foodXPosition
-    let foodYPosition
+    // apple is placed randomy on the board by generating random numbers for array indexes
 
-    foodXPosition = Math.floor(Math.random() * width)
-    foodYPosition = Math.floor(Math.random() * height)
+    let foodXPosition = Math.floor(Math.random() * width)
+    let foodYPosition = Math.floor(Math.random() * height)
 
     gridArray[foodYPosition][foodXPosition].food = 1
+    // console.log(`${appleXPosition}${foodYPosition}`)
+
     
+    // Loops through the arrays to check if the food put down already has a class of SNAKE so food has to placed on a white classless div
+  
     for (let yPosition = 0; yPosition < height; yPosition++) { 
       for (let xPosition = 0; xPosition < width; xPosition++){
 
@@ -43,26 +48,74 @@ function init() {
           gridArray[foodYPosition][foodXPosition].food = 0
           foodXPosition = Math.floor(Math.random() * width)
           foodYPosition = Math.floor(Math.random() * height)
-
+          console.log('cant be placed, generate new')
           gridArray[foodYPosition][foodXPosition].food = 1
-          console.log('cant be placed, moved')
-        }  // Loops through the arrays to check if the food put down already has a class of SNAKE so food has to placed on a white classless div
+        } 
       }
-    }
     
-    // apple is placed randomy on the board by generating random numbers for array indexes
-    // console.log(`${appleXPosition}${foodYPosition}`)
+    }
   }
 
+  function createSnakeTraps(){
 
+    // apple is placed randomy on the board by generating random numbers for array indexes
 
+    let foodXPosition = Math.floor(Math.random() * width)
+    let foodYPosition = Math.floor(Math.random() * height)
 
+    gridArray[foodYPosition][foodXPosition].food = 1
+    // console.log(`${appleXPosition}${foodYPosition}`)
+
+    
+    // Loops through the arrays to check if the food put down already has a class of SNAKE so food has to placed on a white classless div
+  
+    for (let yPosition = 0; yPosition < height; yPosition++) { 
+      for (let xPosition = 0; xPosition < width; xPosition++){
+
+        if (gridArray[foodYPosition][foodXPosition].element.classList.contains('snake-head')) {
+          gridArray[foodYPosition][foodXPosition].food = 0
+          foodXPosition = Math.floor(Math.random() * width)
+          foodYPosition = Math.floor(Math.random() * height)
+          console.log('cant be placed, generate new')
+          gridArray[foodYPosition][foodXPosition].food = 1
+        } 
+      }
+    
+    }
+  }
+
+  function updatingScore(){
+    score.textContent = scoreUpdate
+  }
 
   //! Snake specs
   let snakeYPosition
   let snakeXPosition
   let snakeDirection
   let snakeLength
+  let scoreUpdate
+
+  function deadScreen() {
+    console.log('working')
+    gameGrid.id = 'dead-screen'
+
+
+    for (let yPosition = 0; yPosition < height; yPosition++) { 
+      for (let xPosition = 0; xPosition < width; xPosition++) {
+        gridArray[yPosition][xPosition].element.classList.remove('snake-head')    
+        gridArray[yPosition][xPosition].element.classList.remove('snake-food') 
+      }
+    }
+
+    gameGrid.id = 'dead-screen'
+    gameGrid.classList.remove('grid')
+    gameGrid.appendChild(deadButton)
+    deadButton.style.display = 'block'
+    deadButton.addEventListener('click', restartGame)
+
+  }
+  
+
 
 
   function restartGame(){
@@ -73,16 +126,19 @@ function init() {
       }
     }
 
+    gameGrid.removeAttribute('id')
+    gameGrid.classList.add('grid')
+    deadButton.style.display = 'none'
+
     snakeYPosition = Math.floor(height / 2)
     snakeXPosition = Math.floor(width / 2)
     snakeLength = 5
     snakeDirection = 'Up'
-
-    
+    scoreUpdate = 0
+    updatingScore()
     createSnakeFood()
+    theGame()
   }
-
-  restartGame()
 
   //snake food 
 
@@ -154,34 +210,30 @@ function init() {
     // making the game lose if the walls are rouched by making the numbers outside of the width and height accessible for adding a class
     if ( snakeXPosition < 0 || snakeXPosition >= width || snakeYPosition < 0 || snakeYPosition >= height)  {
       // console.log('called')
-      restartGame()
+      deadScreen()
     }
     //-----------------------
     //making the game lose if the snake current position is going somewhere where the classlist is already set. i.e can only go somewhere that is 'blank'
     if (gridArray[snakeYPosition][snakeXPosition].snake > 0){
-      restartGame()
+      deadScreen()
     }
     //WINNING CONDITIONS
     // making game win a "point" by collecting food divs and gaining length
     if (gridArray[snakeYPosition][snakeXPosition].food === 1) {
       gridArray[snakeYPosition][snakeXPosition].element.classList.remove('snake-food')
-      gridArray[snakeYPosition][snakeXPosition].food = 0
+ 
       snakeLength++
-      // console.log(snakeLength)
+      scoreUpdate += 100
+      updatingScore()
       gridArray[snakeYPosition][snakeXPosition].food = 0
       createSnakeFood()
     }
-
-
-
-
-
     
     // HERE!!!! would be where the first.. " viewable active moment of the game starts" !!!!! 
     gridArray[snakeYPosition][snakeXPosition].snake = snakeLength
     // console.log( `${[snakeYPosition]} ${[snakeXPosition]}.snake = ${snakeLength}`)
 
-
+    
 
 
     // console.log('loop game')
@@ -211,7 +263,7 @@ function init() {
 
 
 
-  startButton.addEventListener('click', theGame )
+  startButton.addEventListener('click', restartGame)
 
 
 

@@ -33,3 +33,28 @@
       border: 1px solid green;
     }
   
+  .score {
+    width:2px;
+    height: 20px;
+    border:2px solid black;
+  }
+
+  #dead-screen {
+    background-image:linear-gradient( rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 0.5) ),url('../assets/imgs/Untitled-1.jpg');
+    background-size: contain;
+      /* background:rgba(0,0,0,0.3); */
+  
+      height: 700px;
+      width: 700px;
+      border: 2px solid grey;
+
+  }
+  
+  .dead-button {
+    display: none;
+    width: 100px;
+    height: 40px;
+    margin: 0 auto;
+    margin-top: 50%;
+  }
