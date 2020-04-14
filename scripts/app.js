@@ -21,7 +21,6 @@ function init() {
   let snakeDirection
   let snakeLength
   let scoreUpdate
-  let laserPosition
 
   function randomNum(){
     return (Math.floor(Math.random() * width))
@@ -89,6 +88,70 @@ function init() {
       }
     }
   }
+
+  let laserPosition
+  let laserDirection
+  let laserXPos
+  let laserYPos
+
+  function handleLaserPosition(event){
+    if (event.code === 'Space') {
+      switch (snakeDirection) {
+        case 'Right' : 
+          laserXPos = snakeXPosition + 2
+          laserYPos = snakeYPosition
+          laserDirection = 'Right'
+          console.log(laserDirection)
+
+          break
+        case 'Left' : 
+          laserXPos = snakeXPosition - 2
+          laserYPos = snakeYPosition
+          laserDirection = 'Left'
+          break
+        case 'Up' :  
+          laserXPos = snakeXPosition 
+          laserYPos = snakeYPosition - 2
+          laserDirection = 'Up'
+          break
+        case 'Down' : 
+          laserXPos = snakeXPosition 
+          laserYPos = snakeYPosition + 2
+          laserDirection = 'Down'
+          break
+      }
+      laserMove()
+    }
+
+    function laserMove() {
+
+      console.log('hi')
+   
+    
+      switch (laserDirection) {
+        case 'Right':
+          laserXPos++
+          console.log(`${laserXPos} ${laserYPos}`)
+          
+          break
+        case 'Left' :
+          laserXPos--
+          break
+        case 'Up' : 
+          laserYPos--
+          break
+        case 'Down': 
+          laserYPos++
+          break
+      }
+      gridArray[laserYPos][laserXPos].laser = 1
+
+
+      const laserTimer = setTimeout(laserMove, 100)
+
+    }
+  }
+    
 
   function updatingScore(){
     score.textContent = scoreUpdate
@@ -163,44 +226,34 @@ function init() {
       for (let xPosition = 0; xPosition < width; xPosition++){
 
         if (gridArray[yPosition][xPosition].snake > 0) {
+          gridArray[yPosition][xPosition].element.classList.remove('laser') 
           gridArray[yPosition][xPosition].element.classList.add('snake-head') 
-          gridArray[yPosition][xPosition].snake-- // THE NUMVER OF ITERATIONS THE CLASS IS ON THE BOARD FOR, STATING HOW  LONG ITLL MEET THE CONDITION OF THE LOOP AND DECREASE BY ONE ADTER EVERY LOOP INCREMENTALLY, 
-
+          gridArray[yPosition][xPosition].snake-- // THE NUMVER OF ITERATIONS THE CLASS IS ON THE BOARD FOR, STATING HOW  LONG ITLL MEET THE CONDITION OF THE LOOP AND DECREASE BY ONE ADTER EVERY LOOP INCREMENTALLY,
         } else if (gridArray[yPosition][xPosition].food === 1) {
           gridArray[yPosition][xPosition].element.classList.add('snake-food')
         } else if (gridArray[yPosition][xPosition].trap === 1) {
           gridArray[yPosition][xPosition].element.classList.add('snake-trap') 
+        } else if (gridArray[yPosition][xPosition].laser > 0 ) {
+          gridArray[yPosition][xPosition].element.classList.add('laser') 
+          gridArray[yPosition][xPosition].laser--
         } else {
           gridArray[yPosition][xPosition].element.classList.remove('snake-head')    ///  REMOVES THE CLASS IF THE SNAKE
           gridArray[yPosition][xPosition].element.classList.remove('snake-food')
           gridArray[yPosition][xPosition].element.classList.remove('snake-trap')
-          gridArray[yPosition][xPosition].element.classList.remove('laser')     // OR SNAKE FOOD IS NOT AT POSITION INDEX
-        }
+          gridArray[yPosition][xPosition].element.classList.remove('laser') 
+          // OR SNAKE FOOD IS NOT AT POSITION INDEX
+        } 
       }
     }
     
     
 
 
+    
     // handling the movement of the snake, none of this is called untill triggered by a keyboard event /// ! DEAFULT UP SETTING MOVES
-    function handleDirectionKeys(event) {
-      switch (event.key) {
-        case 'ArrowRight':
-          snakeDirection = 'Right'
-          break
-        case 'ArrowLeft': 
-          snakeDirection = 'Left'
-          break
-        case 'ArrowUp':
-          snakeDirection = 'Up'
-          break
-        case 'ArrowDown':
-          snakeDirection = 'Down'
-          break
-      }
-    }
+  
     switch (snakeDirection) {
-      case 'Right' :
+      case 'Right':
         snakeXPosition++
         break
       case 'Left' :
@@ -213,53 +266,48 @@ function init() {
         snakeYPosition++
         break
     }
+    
+    
+    function handleDirectionKeys(event) {
+      switch (event.key) {
+        case 'ArrowRight' :
+          if ( snakeDirection !== 'Left') {
+            snakeDirection = 'Right'
+          }
+          break
+        case 'ArrowLeft': 
+          if (snakeDirection !== 'Right') {
+            snakeDirection = 'Left'
+          }
+          break
+        case 'ArrowUp': 
+          if (snakeDirection !== 'down') {
+            snakeDirection = 'Up'
+          }
+          break
+        case 'ArrowDown':
+          if (snakeDirection !== 'Up') {
+            snakeDirection = 'Down'
+          }
+          break
+      }
+    }
+   
     document.addEventListener('keyup', handleDirectionKeys)
     
 
-    // ------------------------------------------------
+    // -----------------------------------------------
 
-    function handleSnakeGun(event) {
-      if (event.code === 'Space' ) {
+   
+    
+    
+    
 
-        switch (snakeDirection) {
-          case 'Right' : laserPosition = gridArray[snakeYPosition][snakeXPosition + 1]
-            break
-          case 'Left' : laserPosition = gridArray[snakeYPosition][snakeXPosition - 1]
-            break
-          case 'Up' :  laserPosition = gridArray[snakeYPosition - 1][snakeXPosition]
-            break
-          case 'Down' :laserPosition = gridArray[snakeYPosition + 1][snakeXPosition] 
-            break
-        }
-
-        laserPosition.element.classList.add('laser')
-        console.log('laser-read')
-        
-
-      }
-    }
-    document.addEventListener('keydown', handleSnakeGun)
-
-    // function snakeGun() {
-    //   switch (snakeDirection) {
-    //     case 'Right' : laserPosition = gridArray[snakeYPosition][snakeXPosition++ ]
-    //       break
-    //     case 'Left' : laserPosition = gridArray[snakeYPosition][snakeXPosition--]
-    //       break
-    //     case 'Up' :  laserPosition = gridArray[snakeYPosition--][snakeXPosition]
-    //       break
-    //     case 'Down' :laserPosition = gridArray[snakeYPosition++][snakeXPosition] 
-    //       break
-    //   }
-    // }
-
-
-
-
-
+    document.addEventListener('keydown', handleLaserPosition)
+    
     //!LOSIING CONDITIONS
     // making the game lose if the walls are rouched by making the numbers outside of the width and height accessible for adding a class
-    if ( snakeXPosition < 0 || snakeXPosition >= width || snakeYPosition < 0 || snakeYPosition >= height)  {
+    if ( snakeXPosition < 0 || snakeXPosition >= width - 1 || snakeYPosition < 0 || snakeYPosition >= height - 1)  {
       updatingHighScore()
       deadScreen()
     } else if (gridArray[snakeYPosition][snakeXPosition].snake > 0){
@@ -275,7 +323,6 @@ function init() {
     // making game win a "point" by collecting food divs and gaining length
     if (gridArray[snakeYPosition][snakeXPosition].food === 1) {
       gridArray[snakeYPosition][snakeXPosition].element.classList.remove('snake-food')
- 
       snakeLength++
       scoreUpdate += 100
       updatingScore()
