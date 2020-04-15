@@ -29,44 +29,69 @@ function init() {
   for (let yPosition = 0; yPosition < height; yPosition++) { // two loops for height and width
     const rowArray = [] // creates 
     for (let xPosition = 0; xPosition < width; xPosition++){
-      const cell = { snake: 0, food: 0, trap: 0, laser: 0 } // object to store the snakes specs
+      const cell = { snake: 0, food: 0, trap: 0, laser: 0, door: 0 } // object to store the snakes specs
       cell.element = document.createElement('div')
       gameGrid.appendChild(cell.element) // store the cell div on the board
       rowArray.push(cell) // add it into a row
       cell.element.textContent = `${xPosition}, ${yPosition}` // keep track of the coordinates
       cell.element.style.fontSize = '8px' 
+      
     }
     gridArray.push(rowArray) // add row into board
   }
   
 
-  function createSnakeFood(){
-    // food is placed randomy on the board by generating random numbers for array indexes
-    let foodXPosition = randomNum()
-    let foodYPosition = randomNum()
-    gridArray[foodYPosition][foodXPosition].food = 1
-    // console.log(`${appleXPosition}${foodYPosition}`)
+  snakeLength = 5
+  const levelUpLow = snakeLength - snakeLength 
+  const LevelUpHigh = (width - 1) - snakeLength 
+  // console.log( levelUpLow)
 
-    // Loops through the arrays to check if the food put down already has a class of SNAKE so food has to placed on a white classless div
-    for (let yPosition = 0; yPosition < height; yPosition++) { 
-      for (let xPosition = 0; xPosition < width; xPosition++){
-        if (gridArray[foodYPosition][foodXPosition].element.classList.contains('snake-head') ||
-        gridArray[foodYPosition][foodXPosition].element.classList.contains('doors')) {
-          gridArray[foodYPosition][foodXPosition].food = 0
-          foodXPosition = randomNum()
-          foodYPosition = randomNum()
-          console.log('cant be placed, generate new')
-          gridArray[foodYPosition][foodXPosition].food = 1
-        }
+  for (let y = 0; y < height; y++) { 
+    for (let x = 0; x < width; x++) {
+      if ( x < snakeLength - levelUpLow || y < snakeLength - levelUpLow || x > LevelUpHigh  || y > LevelUpHigh) {
+        gridArray[x][y].door = 1
+        gridArray[x][y].element.classList.add('doors')
+      } else {
+        gridArray[x][y].door = 0
       }
     }
   }
-  ///---------------- creating snake traps
+
+  console.log(gridArray)
+
+
+  let foodBlock 
+  let foodXPosition
+  let foodYPosition
+    
+  
+  function testFood(){
+    do { 
+      foodXPosition = randomNum()
+      foodYPosition = randomNum()
+      // console.log( `${foodYPosition} ${foodXPosition}`)
+      for (let y = 0; y < height; y++) { 
+        for (let x = 0; x < width; x++){
+          if ( gridArray[foodYPosition][foodXPosition].door > 0 ){
+            gridArray[foodYPosition][foodXPosition].food = 0
+            // console.log('dont appear')
+            foodBlock = 1
+          } else {
+            gridArray[foodYPosition][foodXPosition].food = 1
+            // console.log('appear')
+            foodBlock = 2
+          }
+        }
+      }
+    }
+    while (foodBlock === 1)
+
+  }
 
   let trapTimer
 
   function creatingSnakeTraps() {
-    console.log('being read')
+
     
     function beginTraps() {
       trapTimer = setTimeout(creatingSnakeTraps, 30000)
@@ -80,11 +105,11 @@ function init() {
 
     for (let y = 0; y < height; y++) { 
       for (let x = 0; x < width; x++){
-        if (gridArray[y][y].element.classList.contains('snake-head') || 
+        if (gridArray[y][x].element.classList.contains('snake-head') || 
         gridArray[y][x].element.classList.contains('snake-food') ||
         gridArray[y][x].element.classList.contains('doors')) {
           gridArray[y][x].trap = 0
-          console.log('cant plae here, generate new')
+          // console.log('cant plae here, generate new')
           const trapXPosition = randomNum()
           const trapYPosition = randomNum()
         } else 
@@ -92,6 +117,13 @@ function init() {
       }
     }
   }
+
+
+
+ 
+
+
+  // ( x < SL - 1 || y <  SL - 1 || x > width - 5 || y > height - 5) {
 
   // Creating Laser variables --------------------------
 
@@ -214,18 +246,20 @@ function init() {
         gridArray[y][x].food = 0
         gridArray[y][x].trap = 0
         gridArray[y][x].laser = 0
-
+        // if ( x < 0 + 4 || y < 0 + 4 || x > width - 5 | y > height - 5) {
+        //   gridArray[x][y].element.classList.add('doors')
+        // }
       }
     }
 
-    for (let y = 0; y < height; y++) { 
-      for (let x = 0; x < width; x++) {
-        if ( x < 0 + 4 || y < 0 + 4 || x > width - 5 | y > height - 5) {
-          gridArray[x][y].element.classList.add('doors')
-        }
+    // for (let y = 0; y < height; y++) { 
+    //   for (let x = 0; x < width; x++) {
+    //     if ( x < 0 + 4 || y < 0 + 4 || x > width - 5 | y > height - 5) {
+    //       gridArray[x][y].element.classList.add('doors')
+    //     }
   
-      }
-    }
+    //   }
+    // }
 
 
 
@@ -239,9 +273,10 @@ function init() {
     snakeDirection = 'Up'
     scoreUpdate = 0
     updatingScore()
-    createSnakeFood()
     creatingSnakeTraps()
     theGame()
+    testFood()
+    
   }
 
 
@@ -269,23 +304,14 @@ function init() {
         } else if (gridArray[y][x].laser > 0 ) {
           gridArray[y][x].element.classList.add('laser') 
           gridArray[y][x].laser--
+        } else if (gridArray[y][x].door === 1) {
+          gridArray[y][x].element.classList.add('doors') 
         } else {
-          gridArray[y][x].element.classList.remove('snake-head','snake-food','snake-trap','laser')   ///  REMOVES THE CLASS IF THE SNAKE
+          gridArray[y][x].element.classList.remove('snake-head','snake-food','snake-trap','laser', 'doors')   ///  REMOVES THE CLASS IF THE SNAKE
           // OR SNAKE FOOD IS NOT AT POSITION INDEX
         } 
       }
     }
-
-
- 
-    // for (let y = 0; y < height; y++) { 
-    //   for (let x = 0; x < width; x++) {
-    //     if ( x < snakeLength - 1 || y < snakeLength - 1 | x > snakeLength + 14 | y > snakeLength + 14) {
-    //       gridArray[x][y].element.classList.remove('remove')
-    //     }
-
-    //   }
-    // }
 
     
     const decreaseTen = setTimeout(theGame, 100)
@@ -368,10 +394,11 @@ function init() {
       gridArray[snakeYPosition][snakeXPosition].element.classList.remove('snake-food')
       snakeLength++
       scoreUpdate += 100
-
+      // levelUpLow++
+      // LevelUpHigh++
       updatingScore()
       gridArray[snakeYPosition][snakeXPosition].food = 0
-      createSnakeFood()
+      testFood()
     }
     
     // HERE!!!! would be where the first.. " viewable active moment of the game starts" !!!!! 
