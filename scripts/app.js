@@ -33,38 +33,18 @@ function init() {
       cell.element = document.createElement('div')
       gameGrid.appendChild(cell.element) // store the cell div on the board
       rowArray.push(cell) // add it into a row
-      cell.element.textContent = `${xPosition}, ${yPosition}` // keep track of the coordinates
+      // cell.element.textContent = `${xPosition}, ${yPosition}` // keep track of the coordinates
       cell.element.style.fontSize = '8px' 
-      
     }
     gridArray.push(rowArray) // add row into board
   }
   
-
-  snakeLength = 5
-  const levelUpLow = snakeLength - snakeLength 
-  const LevelUpHigh = (width - 1) - snakeLength 
-  // console.log( levelUpLow)
-
-  for (let y = 0; y < height; y++) { 
-    for (let x = 0; x < width; x++) {
-      if ( x < snakeLength - levelUpLow || y < snakeLength - levelUpLow || x > LevelUpHigh  || y > LevelUpHigh) {
-        gridArray[x][y].door = 1
-        gridArray[x][y].element.classList.add('doors')
-      } else {
-        gridArray[x][y].door = 0
-      }
-    }
-  }
-
-  console.log(gridArray)
-
+  //! creating Food --------------------------------
 
   let foodBlock 
   let foodXPosition
   let foodYPosition
-    
-  
+
   function testFood(){
     do { 
       foodXPosition = randomNum()
@@ -72,7 +52,9 @@ function init() {
       // console.log( `${foodYPosition} ${foodXPosition}`)
       for (let y = 0; y < height; y++) { 
         for (let x = 0; x < width; x++){
-          if ( gridArray[foodYPosition][foodXPosition].door > 0 ){
+          if ( gridArray[foodYPosition][foodXPosition].door > 0 ||
+            gridArray[foodYPosition][foodXPosition].trap > 0 ||
+            gridArray[foodYPosition][foodXPosition].snake > 0 ) {
             gridArray[foodYPosition][foodXPosition].food = 0
             // console.log('dont appear')
             foodBlock = 1
@@ -85,47 +67,40 @@ function init() {
       }
     }
     while (foodBlock === 1)
-
   }
 
-  let trapTimer
+  //! Creating traps ---------------------------
 
-  function creatingSnakeTraps() {
+  let trapBlock 
+  let trapXPos
+  let trapYPos
 
-    
-    function beginTraps() {
-      trapTimer = setTimeout(creatingSnakeTraps, 30000)
-    }
-    beginTraps()
+  function createTraps(){
+    do { 
+      trapXPos = randomNum()
+      trapYPos = randomNum()
+      console.log( `${trapYPos} ${trapYPos}`)
 
-    const trapXPosition = randomNum()
-    const trapYPosition = randomNum()
-
-    
-
-    for (let y = 0; y < height; y++) { 
-      for (let x = 0; x < width; x++){
-        if (gridArray[y][x].element.classList.contains('snake-head') || 
-        gridArray[y][x].element.classList.contains('snake-food') ||
-        gridArray[y][x].element.classList.contains('doors')) {
-          gridArray[y][x].trap = 0
-          // console.log('cant plae here, generate new')
-          const trapXPosition = randomNum()
-          const trapYPosition = randomNum()
-        } else 
-          gridArray[trapYPosition][trapXPosition].trap = 1
+      for (let y = 0; y < height; y++) { 
+        for (let x = 0; x < width; x++){
+          if (gridArray[trapYPos][trapXPos].door > 0 ||
+            gridArray[trapYPos][trapXPos].trap > 0 ||
+            gridArray[trapYPos][trapXPos].snake > 0) {
+            console.log('dont appear')
+            gridArray[trapYPos][trapXPos].trap = 0
+            trapBlock = 1
+          } else {
+            gridArray[trapYPos][trapXPos].trap = 1
+            console.log('appear')
+            trapBlock = 2
+          }
+        }
       }
     }
+
+    while (trapBlock === 1)
   }
-
-
-
- 
-
-
-  // ( x < SL - 1 || y <  SL - 1 || x > width - 5 || y > height - 5) {
-
-  // Creating Laser variables --------------------------
+  //!  Creating Laser variables --------------------------
 
 
   let laserDirection
@@ -196,6 +171,7 @@ function init() {
     }
   }
 
+  //! updating Scores ------------------------------------
 
   function updatingScore(){
     score.textContent = scoreUpdate
@@ -210,13 +186,13 @@ function init() {
   }
 
 
-  // Death screen ------------------------
+  //! Death screen ------------------------
 
 
   function deadScreen() {
     
     console.log('dead')
-    clearTimeout(trapTimer)
+    // clearTimeout(trapTimer)
     clearTimeout(laserTimer)
 
    
@@ -236,7 +212,7 @@ function init() {
 
   }
   
-  //Restarting game -----------------------------------------
+  //! Restarting game -----------------------------------------
 
   function restartGame(){
 
@@ -260,9 +236,6 @@ function init() {
   
     //   }
     // }
-
-
-
     startButton.style.display = 'none'
     gameGrid.removeAttribute('id')
     gameGrid.classList.add('grid')
@@ -273,17 +246,11 @@ function init() {
     snakeDirection = 'Up'
     scoreUpdate = 0
     updatingScore()
-    creatingSnakeTraps()
     theGame()
+    createTraps()
     testFood()
     
   }
-
-
-
-  
-
-
 
   function theGame(){
     // FUNCTIONING PART OF THE GAME!! HERE LOOP TO MAKE THE SNAKE PRESET, CLASS WILL GET ADDED BASED ON THIS!!!!!! 
@@ -313,10 +280,26 @@ function init() {
       }
     }
 
-    
     const decreaseTen = setTimeout(theGame, 100)
     
-    
+    snakeLength = 5
+    const levelUpLow = snakeLength - snakeLength 
+    const LevelUpHigh = (width - 1) - snakeLength 
+    // console.log( levelUpLow)
+
+    for (let y = 0; y < height; y++) { 
+      for (let x = 0; x < width; x++) {
+        if ( x < snakeLength - levelUpLow || y < snakeLength - levelUpLow || x > LevelUpHigh  || y > LevelUpHigh) {
+          gridArray[x][y].door = 1
+          gridArray[x][y].element.classList.add('doors')
+        } else {
+          gridArray[x][y].door = 0
+        }
+      }
+    }
+
+
+
     // handling the movement of the snake, none of this is called untill triggered by a keyboard event /// ! DEAFULT UP SETTING MOVES
   
     switch (snakeDirection) {
@@ -381,7 +364,7 @@ function init() {
     } else if (gridArray[snakeYPosition][snakeXPosition].snake > 0){
       updatingHighScore()
       deadScreen()    //making the game lose if the snake current position is going somewhere where the classlist is already set. i.e can only go somewhere that is 'blank'
-    } else if (gridArray[snakeYPosition][snakeXPosition].trap > 0) {
+    } else if (gridArray[snakeYPosition][snakeXPosition].trap === 1 ) {
       updatingHighScore()
       deadScreen()
     } 
@@ -417,10 +400,6 @@ function init() {
     //   const maxSpeed = setTimeout(theGame, 55)
     //   console.log('maxSpeed')
     // }
-
-
-
-    
     
   //gameLoop
   }
@@ -428,8 +407,6 @@ function init() {
   
   
   startButton.addEventListener('click', restartGame)
-
-
 
 }
 window.addEventListener('DOMContentLoaded' , init)
