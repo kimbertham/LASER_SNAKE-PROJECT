@@ -34,12 +34,12 @@ body {
 
 
 #snake-head {
-    background-image: url('../assets/imgs/Untitled-3.jpg');
+    background-image: url('../assets/imgs/snake\ blue.jpg');
     background-size: contain;
   }
 
   #snake-food {
-background-image: url('../assets/imgs/Untitled-6.jpg');   
+background-image: url('../assets/imgs/fruit.jpg');   
    background-size:cover;
 
 
@@ -74,13 +74,15 @@ background-image: url('../assets/imgs/Untitled-6.jpg');
   }
 
   #laser {
-    background-color: orange;
-    border: 1px solid darkorange;
+    /* background-color: orange;
+    border: 1px solid darkorange; */
+    background-image: url('../assets/imgs/laser.jpg');
+    background-size: contain;
 
   }
 
   #doors {
-    background-image: url('../assets/imgs/walls.jpg');
+    background-image: url('../assets/imgs/Untitled-3.jpg');
     background-size: contain;
     background-color:pink;
     /* border: 1px solid pink; */
@@ -160,9 +162,6 @@ background-size: contain;
 .high-scores {
   width: 150px;
   padding: 10px;
-
-  
-  
 }
 
 .start-button {

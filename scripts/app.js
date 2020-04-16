@@ -77,6 +77,8 @@ function init() {
 
     // console.log(' working')
 
+  
+
     setTraps()
 
     do { 
@@ -176,6 +178,9 @@ function init() {
     } 
     if ( laserXPos < 0 || laserXPos >= width || laserYPos < 0 || laserYPos >=  height )  {
       clearTimeout(laserTimer)
+    }
+    if (gridArray[laserYPos][laserXPos].door > 0 ){
+      gridArray[laserYPos][laserXPos].laser = 0 
     }
   }
 
