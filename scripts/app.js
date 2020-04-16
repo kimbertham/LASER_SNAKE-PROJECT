@@ -13,7 +13,6 @@ function init() {
   const height = 23
   const width = 23
 
-  //! Snake specs
   let snakeYPosition
   let snakeXPosition
   let snakeDirection
@@ -73,7 +72,13 @@ function init() {
   let trapXPos
   let trapYPos
 
+  
   function createTraps(){
+
+    console.log(' working')
+
+    setTraps()
+
     do { 
       trapXPos = randomNum()
       trapYPos = randomNum()
@@ -95,11 +100,18 @@ function init() {
         }
       }
     }
-
     while (trapBlock === 1)
   }
-  //!  Creating Laser variables --------------------------
 
+  function setTraps(){
+    clearInterval(trapsTimer)
+    trapsTimer =  setInterval(createTraps, 10000)
+  }
+
+  let trapsTimer 
+
+
+  //!  Creating Laser variables --------------------------
 
   let laserDirection
   let laserXPos
@@ -186,20 +198,18 @@ function init() {
 
 
   function deadScreen() {
-    
-    console.log('dead')
-    // clearTimeout(trapTimer)
-    clearTimeout(laserTimer)
-
-   
 
     for (let y = 0; y < height; y++) { 
       for (let x = 0; x < width; x++) {
-        gridArray[y][x].element.classList.remove('snake-head')    
-        gridArray[y][x].element.classList.remove('snake-food') 
-        gridArray[y][x].element.classList.remove('laser')
+        gridArray[y][x].element.classList.remove('snake-head', 'snake-food','laser','doors','snake-trap')
+        gridArray[y][x].element.removeAttribute('id')
       }
     }
+    
+    console.log('dead')
+    clearTimeout(laserTimer)
+
+
     gameGrid.id = 'dead-screen'
     gameGrid.classList.remove('grid')
     gameGrid.appendChild(deadButton)
@@ -253,6 +263,7 @@ function init() {
     scoreUpdate = 0
     num = 5
     numTwo = 17
+    snakeLength = 5
     updatingScore()
 
     changeLevel()
@@ -271,30 +282,51 @@ function init() {
     // GOTTA MANIPULTE THE VARIABLES TO MAKE THE MOVEMENT APPEAR DIFF
     //! gridArray[y][xPosition ] <------- (LOOP - LOCAL TO LOOP) THE POSITION OF THE SNAKE IS WHATEVER IS FED IN [][] 
     //! gridArray[snakeXPosition][snakeYPosition] // <------- (GAME - LOCAL TO FUNCTION) THE POSITION OF THE SNAKE IS WHATEVER IS FED IN [][]
+    // const decreaseTen = setTimeout(theGame, 1000)
+
+    const decreaseTen = setTimeout(theGame, 200 - (snakeLength * 10))
+    let maxSpeed
+    let decreaseTwo 
+
+    if (snakeLength > 10  && snakeLength < 19) {
+      clearTimeout(decreaseTen)
+      decreaseTwo = setTimeout(theGame, 100 - (snakeLength * 2))
+
+      console.log(100 - (snakeLength * 2))
+    } else if (snakeLength > 20) {
+      clearTimeout(decreaseTen)
+      maxSpeed = setTimeout(theGame, 55)
+      console.log('maxSpeed')
+    }
+
+
+   
+
 
     for (let y = 0; y < height; y++) { 
       for (let x = 0; x < width; x++){
 
         if (gridArray[y][x].snake > 0) {
-          gridArray[y][x].element.classList.add('snake-head') 
+          gridArray[y][x].element.setAttribute('id', 'snake-head')
           gridArray[y][x].snake-- // THE NUMVER OF ITERATIONS THE CLASS IS ON THE BOARD FOR, STATING HOW  LONG ITLL MEET THE CONDITION OF THE LOOP AND DECREASE BY ONE ADTER EVERY LOOP INCREMENTALLY,
         } else if (gridArray[y][x].food === 1) {
-          gridArray[y][x].element.classList.add('snake-food')
+          gridArray[y][x].element.setAttribute('id','snake-food')
         } else if (gridArray[y][x].trap === 1) {
-          gridArray[y][x].element.classList.add('snake-trap') 
+          gridArray[y][x].element.setAttribute('id', 'snake-trap')
         } else if (gridArray[y][x].laser > 0 ) {
-          gridArray[y][x].element.classList.add('laser') 
+          gridArray[y][x].element.setAttribute('id','laser') 
           gridArray[y][x].laser--
         } else if (gridArray[y][x].door === 1) {
-          gridArray[y][x].element.classList.add('doors') 
+          gridArray[y][x].element.setAttribute('id', 'doors') 
         } else {
-          gridArray[y][x].element.classList.remove('snake-head','snake-food','snake-trap','laser', 'doors')   ///  REMOVES THE CLASS IF THE SNAKE
+          gridArray[y][x].element.classList.remove('snake-head','snake-food','snake-trap','laser', 'doors') 
+          gridArray[y][x].element.removeAttribute('id')///  REMOVES THE CLASS IF THE SNAKE
           // OR SNAKE FOOD IS NOT AT POSITION INDEX
         } 
       }
     }
 
-    const decreaseTen = setTimeout(theGame, 100)
+
 
     // handling the movement of the snake, none of this is called untill triggered by a keyboard event /// ! DEAFULT UP SETTING MOVES
   
@@ -346,18 +378,27 @@ function init() {
     //!LOSIING CONDITIONS
     // making the game lose if the walls are rouched by making the numbers outside of the width and height accessible for adding a class
     if ( snakeXPosition < 0 || snakeXPosition >= width || snakeYPosition < 0 || snakeYPosition >= height)  {
-      const clear = clearTimeout(decreaseTen)
-      updatingHighScore()
       deadScreen()
+      clearTimeout(decreaseTen)
+      clearTimeout(decreaseTwo)
+      clearTimeout(maxSpeed)
+      updatingHighScore()
     } else if (gridArray[snakeYPosition][snakeXPosition].snake > 0){
-      updatingHighScore()
       deadScreen()    //making the game lose if the snake current position is going somewhere where the classlist is already set. i.e can only go somewhere that is 'blank'
+      clearTimeout(decreaseTen)
+      clearTimeout(decreaseTwo)
+      clearTimeout(maxSpeed)
+      updatingHighScore()
     } else if (gridArray[snakeYPosition][snakeXPosition].trap === 1 ) {
-      updatingHighScore()
       deadScreen()
+      clearTimeout(decreaseTen)
+      clearTimeout(decreaseTwo)
+      clearTimeout(maxSpeed)
+      updatingHighScore()
     } else if (gridArray[snakeYPosition][snakeXPosition].door === 1 ) {
-      updatingHighScore()
       deadScreen()
+      clearTimeout(decreaseTen)
+      updatingHighScore()
     } 
     
   
@@ -381,13 +422,27 @@ function init() {
     gridArray[snakeYPosition][snakeXPosition].snake = snakeLength
     // console.log( `${[snakeYPosition]} ${[snakeXPosition]}.snake = ${snakeLength}`)
 
-    
+
+
+
+
+
+
+
+
+
+   
   //gameLoop
   }
   //gameLoop
   
   
+
+  
   startButton.addEventListener('click', restartGame)
+
+
+
 
 }
 window.addEventListener('DOMContentLoaded' , init)
@@ -395,14 +450,4 @@ window.addEventListener('DOMContentLoaded' , init)
 
 
 
-// const decreaseTen = setTimeout(theGame, 200 - (snakeLength * 10))
-
-// if (snakeLength > 7 && snakeLength < 9) {
-//   clearTimeout(decreaseTen)
-//   const decreaseTwo = setTimeout(theGame, 100 - (snakeLength * 2))
-//   console.log(100 - (snakeLength * 2))
-// } else if (snakeLength > 11) {
-//   clearTimeout(decreaseTen)
-//   const maxSpeed = setTimeout(theGame, 55)
-//   console.log('maxSpeed')
-// }
+// 

@@ -1,36 +1,42 @@
+body { 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: grey;
+
+}
+
 
 .grid-container {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: black;;
+  border: 8px solid red;
 }
 
 .grid {
   align-items: center;
+ 
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   height: 700px;
   width: 700px;
-  border: 2px solid black
+  border: 1px solid black
 }
 
-.grid div {
-  border: 1px solid lightgrey;
-  align-content: center;
-  flex-grow: 1;
-  height: 4%;
-  width: 4%;
-}
 
-.snake-head {
-    background-color: pink;
-    border: 1px solid red 
+#snake-head {
+    background-image: url('../assets/imgs/Untitled-3.jpg');
+    background-size: contain;
   }
 
-  .snake-food {
-      background-color: lightgreen;
-      border: 1px solid green;
+  #snake-food {
+background-image: url('../assets/imgs/Untitled-6.jpg');   
+   background-size:cover;
+
+
     }
   
   .score {
@@ -40,14 +46,15 @@
   }
 
   #dead-screen {
-    background-image:linear-gradient( rgba(0, 0, 0, 0.5),
+    /* background-image:linear-gradient( rgba(0, 0, 0, 0.5),
     rgba(0, 0, 0, 0.5) ),url('../assets/imgs/Untitled-1.jpg');
-    background-size: contain;
+    background-size: contain; */
       /* background:rgba(0,0,0,0.3); */
   
       height: 700px;
       width: 700px;
       border: 2px solid grey;
+
 
   }
   
@@ -59,20 +66,31 @@
     margin-top: 50%;
   }
 
-  .snake-trap {
-  background-color:grey;
-  border: 1px solid red; 
-  border-radius: 50%;
-  margin: 0;
+  #snake-trap {
+  background-image: url('../assets/imgs/Untitled-1.jpg');
+  background-size: cover;
   }
 
-  .laser {
+  #laser {
     background-color: orange;
     border: 1px solid darkorange;
 
   }
 
-  .doors {
-    background-color: lightblue;
-    border: 1px solid blue;
+  #doors {
+    background-image: url('../assets/imgs/walls.jpg');
+    background-size: contain;
+    background-color:pink;
+    /* border: 1px solid pink; */
+
+  }
+
+  .grid div {
+background-color: black;
+background-size: contain;
+    border: 1px solid;
+    align-content: center;
+    flex-grow: 1;
+    height: 4%;
+    width: 4%;
   }
