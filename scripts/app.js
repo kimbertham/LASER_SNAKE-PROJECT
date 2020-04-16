@@ -300,7 +300,7 @@ function init() {
     } else if (snakeLength >= 20) {
       clearTimeout(decreaseTwo)
       clearTimeout(decreaseTen)
-      maxSpeed = setTimeout(theGame, 70)
+      maxSpeed = setTimeout(theGame, 65)
       console.log('maxSpeed')
     }
 
