@@ -2,7 +2,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: grey;
+  background-image: url('../assets/imgs/1.jpg');
+  background-size: cover;
 
 }
 
@@ -12,12 +13,17 @@ body {
   justify-content: center;
   align-items: center;
   background-color: black;;
-  border: 8px solid red;
+  border: 4px groove #45d7b5;
+  box-shadow: 0 0 10px 0 rgba(25, 186, 175, 0.9);
+  margin: 10px 0 0 0 ;
+
+
+
+
 }
 
 .grid {
   align-items: center;
- 
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -39,11 +45,7 @@ background-image: url('../assets/imgs/Untitled-6.jpg');
 
     }
   
-  .score {
-    width:2px;
-    height: 20px;
-    border:2px solid black;
-  }
+  
 
   #dead-screen {
     /* background-image:linear-gradient( rgba(0, 0, 0, 0.5),
@@ -94,3 +96,93 @@ background-size: contain;
     height: 4%;
     width: 4%;
   }
+
+.title{
+  display: flex;
+  margin: 0;
+  margin: 20px 20px 10px 45px;  
+  border-radius: 20px;
+
+}
+
+.instructions {
+  border: 2px solid black; 
+  font-family: 'Russo One', sans-serif;
+  font-size: 15px;
+  margin: 25px 25px 0 45px ;
+  width: 250px;
+  height: 400px;
+  padding: 25px;
+  background-color: black;
+  border: 4px outset white;
+  color: white;
+  border-radius: 25px;
+  background-image:linear-gradient( rgba(0, 0, 0, 0.5),
+  rgba(0, 0, 0, 0.5)), url('../assets/imgs/div-bg.jpg');
+  background-size: contain;
+  
+
+}
+
+  .scores-wrapper {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    text-align: center;
+    border: 2px solid black ;
+    padding: 14px;
+    font-size: 20px;
+    height: 250px;
+    width: 250px;
+    margin: 0 0 20px 20px;
+    background-color: black;
+    color: cadetblue;
+    font-family: 'Russo One', sans-serif;
+    border: 4px outset white;
+    border-radius: 10px;
+  }
+
+  .scores-wrapper p {
+    border: grey outset 2px;
+    border-radius: 3px;
+    padding:10px;
+    background-color: #282a29;
+    color: white;
+  }
+
+
+  .current-score {
+    border: 2px solid black;
+    width: 150px;
+
+  }
+
+.high-scores {
+  width: 150px;
+  padding: 10px;
+
+  
+  
+}
+
+.start-button {
+  margin: 20px 0 0 20px; 
+  height: 100px;
+  width: 275px;
+  border-radius: 15px;
+  background-color: black;
+  color: grey;
+  border: none;
+  font-size: 35px;
+  font-family: 'Russo One', sans-serif;
+  border: 5px outset white; 
+}
+
+h2 {
+  background-color: #282a29;
+  padding: 15px;
+  margin: 0;
+  border-radius: 5px;
+  border: grey outset 2px;
+  
+}

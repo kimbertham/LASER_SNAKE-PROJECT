@@ -75,7 +75,7 @@ function init() {
   
   function createTraps(){
 
-    console.log(' working')
+    // console.log(' working')
 
     setTraps()
 
@@ -105,7 +105,7 @@ function init() {
 
   function setTraps(){
     clearInterval(trapsTimer)
-    trapsTimer =  setInterval(createTraps, 10000)
+    trapsTimer =  setInterval(createTraps, 15000)
   }
 
   let trapsTimer 
@@ -234,7 +234,7 @@ function init() {
         }
       }
     }
-    console.log(`${num} ${numTwo}`)
+    // console.log(`${num} ${numTwo}`)
   }
 
 
@@ -283,25 +283,21 @@ function init() {
     //! gridArray[y][xPosition ] <------- (LOOP - LOCAL TO LOOP) THE POSITION OF THE SNAKE IS WHATEVER IS FED IN [][] 
     //! gridArray[snakeXPosition][snakeYPosition] // <------- (GAME - LOCAL TO FUNCTION) THE POSITION OF THE SNAKE IS WHATEVER IS FED IN [][]
     // const decreaseTen = setTimeout(theGame, 1000)
-
-    const decreaseTen = setTimeout(theGame, 200 - (snakeLength * 10))
+    const decreaseTen = setTimeout(theGame, 240 - (snakeLength * 10))
+   
     let maxSpeed
     let decreaseTwo 
 
-    if (snakeLength > 10  && snakeLength < 19) {
+    if (snakeLength >= 11  && snakeLength < 19) {
       clearTimeout(decreaseTen)
-      decreaseTwo = setTimeout(theGame, 100 - (snakeLength * 2))
-
+      decreaseTwo = setTimeout(theGame, 120 - (snakeLength * 2))
       console.log(100 - (snakeLength * 2))
-    } else if (snakeLength > 20) {
+    } else if (snakeLength >= 20) {
+      clearTimeout(decreaseTwo)
       clearTimeout(decreaseTen)
-      maxSpeed = setTimeout(theGame, 55)
+      maxSpeed = setTimeout(theGame, 70)
       console.log('maxSpeed')
     }
-
-
-   
-
 
     for (let y = 0; y < height; y++) { 
       for (let x = 0; x < width; x++){
@@ -357,7 +353,7 @@ function init() {
           }
           break
         case 'ArrowUp': 
-          if (snakeDirection !== 'down') {
+          if (snakeDirection !== 'Down') {
             snakeDirection = 'Up'
           }
           break
