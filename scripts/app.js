@@ -302,16 +302,19 @@ function init() {
         case 'ArrowRight' :
           if ( snakeDirection !== 'Left') {
             snakeDirection = 'Right'
+          
           }
           break
         case 'ArrowLeft': 
           if (snakeDirection !== 'Right') {
             snakeDirection = 'Left'
+            
           }
           break
         case 'ArrowUp': 
           if (snakeDirection !== 'Down') {
             snakeDirection = 'Up'
+          
           }
           break
         case 'ArrowDown':
@@ -320,7 +323,9 @@ function init() {
           }
           break
       }
+   
     }
+
     document.addEventListener('keyup', handleDirectionKeys)
     document.addEventListener('keydown', handleLaserPosition)
     // -----------------------------------------------
