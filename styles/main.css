@@ -84,6 +84,7 @@ background-size: contain;
   }
 
 .title{
+  background-image: url('../assets/imgs/coollogo_com-207481597.png');
   display: flex;
   margin: 0;
   margin: 20px 20px 10px 45px;  
