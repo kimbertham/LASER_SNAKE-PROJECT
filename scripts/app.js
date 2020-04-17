@@ -293,11 +293,11 @@ function init() {
     let maxSpeed
     let decreaseTwo 
 
-    if (snakeLength >= 11  && snakeLength < 19) {
+    if (snakeLength >= 11  && snakeLength < 18) {
       clearTimeout(decreaseTen)
       decreaseTwo = setTimeout(theGame, 120 - (snakeLength * 2))
       console.log(100 - (snakeLength * 2))
-    } else if (snakeLength >= 20) {
+    } else if (snakeLength >= 19) {
       clearTimeout(decreaseTwo)
       clearTimeout(decreaseTen)
       maxSpeed = setTimeout(theGame, 65)
