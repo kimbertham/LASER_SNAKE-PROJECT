@@ -1,249 +1,240 @@
 function init() {
 
-  //DOM elements
   const gameGrid = document.querySelector('.grid')
   const startButton = document.querySelector('.start-button')
   const score = document.querySelector('.score')
   const deadButton = document.querySelector('.dead-button')
-  const highScoreSpan = document.querySelector('.high-score')
+  const hScore = document.querySelector('.high-score')
 
-  //grid specs 
-  const gridArray = []
-  const highScoreArray = []
-  const height = 23
-  const width = 23
+  deadButton.addEventListener('click', restartGame)
+  startButton.addEventListener('click', restartGame)
+  document.addEventListener('keyup', handleDirectionKeys)
+  document.addEventListener('keydown', handleLaserPosition)
 
-  let snakeYPosition
-  let snakeXPosition
-  let snakeDirection
-  let snakeLength = 5
-  let scoreUpdate
-  
-  function randomNum(){
-    return (Math.floor(Math.random() * width))
+  const grid = {
+    cell: [],
+    h: 23,
+    w: 23,
+    inW: 5,
+    inH: 17
   }
- 
-  for (let yPosition = 0; yPosition < height; yPosition++) { 
-    const rowArray = [] 
-    for (let xPosition = 0; xPosition < width; xPosition++){
-      const cell = { snake: 0, food: 0, trap: 0, laser: 0, door: 0 } 
+
+  for (let y = 0; y < grid.h; y++) { 
+    const rows = [] 
+    for (let x = 0; x < grid.w; x++){
+      const cell = { snake: 0, food: 0,trap: 0, laser: 0, door: 0 } 
       cell.element = document.createElement('div')
-      gameGrid.appendChild(cell.element) // store the cell div on the board
-      rowArray.push(cell) // add it into a row
-      // cell.element.textContent = `${xPosition}, ${yPosition}` // keep track of the coordinates
-      cell.element.style.fontSize = '8px' 
+      gameGrid.appendChild(cell.element) 
+      rows.push(cell)
     }
-    gridArray.push(rowArray) // add row into board
+    grid.cell.push(rows) 
+  }
+
+  const game = {
+    score: 0,
+    hScore: [],
+    food: false,
+    trap: false,
+    laser: {
+      x: 0,
+      y: 0,
+      dir: 0
+    }
+  }
+
+  const snake = {
+    x: 0,
+    y: 0,
+    dir: 0,
+    len: 5
+  }
+
+  const timers = {
+    traps: 0,
+    laser: 0
+  }
+
+  function init ()  {
+    for (let y = 0; y < grid.h; y++) { 
+      for (let x = 0; x < grid.w; x++) {
+        const c = grid.cell[y][x] 
+        c.snake = 0
+        c.food = 0
+        c.trap = 0
+        c.laser = 0
+      }
+    }
+
+    snake.y = Math.floor(grid.h / 2)
+    snake.x = Math.floor(grid.w / 2)
+    snake.dir = 'Up'
+    game.score = 0
+    grid.inW = 5
+    grid.inH = 17
+    snake.len = 5
+  }
+
+
+  function ranNum(){
+    return (Math.floor(Math.random() * grid.w))
+  }
+
+  function setAtt (elem, name)  {
+    elem.element.setAttribute('id', name)
   }
   
-  //! creating Food --------------------------------
-  let foodBlock 
-  let foodXPosition
-  let foodYPosition
+  function updatingHighScore(){
+    game.hScore.push(game.score)
+    hScore.textContent = Math.max.apply(null,game.hScore)
+  }
 
-  function testFood(){
+
+  const handleObstacles = (icon) => {
+    
+    if (icon === 'trap') {
+      clearInterval(timers.traps)
+      timers.traps = setInterval(()=>{
+        handleObstacles('trap')
+      }, 10000)
+    }
+
     do { 
-      foodXPosition = randomNum()
-      foodYPosition = randomNum()
-      for (let y = 0; y < height; y++) { 
-        for (let x = 0; x < width; x++){
-          if ( gridArray[foodYPosition][foodXPosition].door > 0 ||
-            gridArray[foodYPosition][foodXPosition].trap > 0 ||
-            gridArray[foodYPosition][foodXPosition].snake > 0 ) {
-            gridArray[foodYPosition][foodXPosition].food = 0
-            foodBlock = 1
+      const cell = grid.cell[ranNum()][ranNum()]
+      for (let y = 0; y < grid.h; y++) { 
+        for (let x = 0; x < grid.w; x++){
+          if ( Object.keys(cell).some(k => cell[k] === 1)) {
+            cell[icon] = false
+            game[icon] = false
           } else {
-            gridArray[foodYPosition][foodXPosition].food = 1
-            foodBlock = 2
+            cell[icon] = 1
+            game[icon] = true
           }
         }
       }
     }
-    while (foodBlock === 1)
+    while (!game[icon])
   }
-  //! Creating traps ---------------------------
-  let trapBlock 
-  let trapXPos
-  let trapYPos
 
-  function createTraps(){
 
-    setTraps()
-
-    do { 
-      trapXPos = randomNum()
-      trapYPos = randomNum()
-      for (let y = 0; y < height; y++) { 
-        for (let x = 0; x < width; x++){
-          if (gridArray[trapYPos][trapXPos].door > 0 ||
-            gridArray[trapYPos][trapXPos].trap > 0 ||
-            gridArray[trapYPos][trapXPos].snake > 0) {
-            gridArray[trapYPos][trapXPos].trap = 0
-            trapBlock = 1
-          } else {
-            gridArray[trapYPos][trapXPos].trap = 1
-
-            trapBlock = 2
-          }
+  function handleDirectionKeys(event) {
+    switch (event.key) {
+      case 'ArrowRight' :
+        if ( snake.dir !== 'Left') {
+          snake.dir = 'Right'
         }
-      }
+        break
+      case 'ArrowLeft': 
+        if (snake.dir !== 'Right') {
+          snake.dir = 'Left'
+        }
+        break
+      case 'ArrowUp': 
+        if (snake.dir !== 'Down') {
+          snake.dir =  'Up'
+        }
+        break
+      case 'ArrowDown':
+        if (snake.dir !== 'Up') {
+          snake.dir =  'Down'
+        }
+        break
     }
-    while (trapBlock === 1)
   }
 
-  function setTraps(){
-    clearInterval(trapsTimer)
-    trapsTimer =  setInterval(createTraps, 15000)
-  }
-  let trapsTimer 
-
-  //!  Creating Laser variables --------------------------
-  let laserDirection
-  let laserXPos
-  let laserYPos
-  let laserTimer 
-  
   function handleLaserPosition(event){
+    const { laser } = game
+
     if (event.code === 'Space') {
-      switch (snakeDirection) {
+      laser.y = snake.y
+      laser.x = snake.x 
+
+      switch (snake.dir) {
         case 'Right' : 
-          laserXPos = snakeXPosition + 2
-          laserYPos = snakeYPosition
-          laserDirection = 'Right'
+          laser.x = snake.x + 2
+          laser.dir = 'Right'
           break
         case 'Left' : 
-          laserXPos = snakeXPosition - 2
-          laserYPos = snakeYPosition
-          laserDirection = 'Left'
+          laser.x = snake.x - 2
+          laser.dir = 'Left'
           break
         case 'Up' :  
-          laserXPos = snakeXPosition 
-          laserYPos = snakeYPosition - 2
-          laserDirection = 'Up'
+          laser.y = snake.y - 2
+          laser.dir = 'Up'
           break
         case 'Down' : 
-          laserXPos = snakeXPosition 
-          laserYPos = snakeYPosition + 2
-          laserDirection = 'Down'
+          laser.y = snake.y + 2
+
+          laser.dir = 'Down'
           break
       }
       laserMove()
     }
   }
+
+
   function laserMove() {
-    switch (laserDirection) {
+    const { laser } = game
+    const cell = grid.cell[laser.y][laser.x]
+
+    timers.laser = setTimeout(laserMove, 50)
+    cell.laser = 1
+
+    switch (laser.dir) {
       case 'Right':
-        laserXPos++
+        laser.x++
         break
       case 'Left' :
-        laserXPos--
+        laser.x--
         break
       case 'Up' : 
-        laserYPos--
+        laser.y--
         break
       case 'Down': 
-        laserYPos++
+        laser.y++
         break
     }
- 
-    gridArray[laserYPos][laserXPos].laser = 1
-    // condition for laser to appear or disappear 
 
-    if (gridArray[laserYPos][laserXPos].trap > 0) {
-      gridArray[laserYPos][laserXPos].trap = 0
-    }  // gets rid of trap by removing class when laser class is on the same spot
-    if (gridArray[laserYPos][laserXPos].door > 0 ){
-      gridArray[laserYPos][laserXPos].laser = 0 
-    } // laser class removed when door class present
-    if (gridArray[laserXPos] < 0 || laserXPos >= width || laserYPos < 0 || laserYPos >=  height ) {
-      clearTimeout(laserTimer)
+    if (cell.trap > 0) {
+      cell.trap = 0
+      clearTimeout(timers.laser)
+    } 
+    if (cell.door > 0 ){
+      cell.laser = 0 
+      clearTimeout(timers.laser)
+    } 
+    if (laser.x < 0 || laser.x >= grid.w ||
+      laser.y < 0 || laser.y >=  grid.h ) {
+      clearTimeout(timers.laser)
     }
-
-    function beginLaser() {
-      laserTimer = setTimeout(laserMove, 50)
-    }
-    beginLaser()
   }
 
-  //! updating Scores ------------------------------------
-  function updatingScore(){
-    score.textContent = scoreUpdate
-  }
-  //=------------
-  function updatingHighScore(){
-    highScoreArray.push(scoreUpdate)
-    const highScore = Math.max.apply(null,highScoreArray)
-    highScoreSpan.textContent = highScore
-  }
-  //! Death screen ------------------------
+
   function deadScreen() {
 
-    clearTimeout(laserTimer)
+    updatingHighScore()
+
     clearTimeout(decreaseTen)
     clearTimeout(decreaseTwo)
     clearTimeout(maxSpeed)
 
-    for (let y = 0; y < height; y++) { 
-      for (let x = 0; x < width; x++) {
-        gridArray[y][x].element.removeAttribute('id')
-      }
-    }
     gameGrid.id = 'dead-screen'
     gameGrid.classList.remove('grid')
-    gameGrid.appendChild(deadButton)
     deadButton.style.display = 'block'
-    deadButton.addEventListener('click', restartGame)
   }
-  //! --------- changing level ----
-  let num = 5
-  let numTwo = 17
 
-  function changeLevel() {
-    for (let y = 0; y < height; y++) { 
-      for (let x = 0; x < width; x++) {
-        if (x < num || y < num || x >  numTwo || y > numTwo ) {
-          gridArray[y][x].door = 1
-          // gridArray[x][y].element.classList.add('doors')
-        } else {
-          // gridArray[x][y].element.classList.remove('doors')
-          gridArray[y][x].door = 0
-        }
-      }
-    }
-  }
-  //! Restarting game -----------------------------------------
+
   function restartGame(){
-    for (let y = 0; y < height; y++) { 
-      for (let x = 0; x < width; x++) {
-        gridArray[y][x].snake = 0
-        gridArray[y][x].food = 0
-        gridArray[y][x].trap = 0
-        gridArray[y][x].laser = 0
-      }
-    }
 
-    startButton.style.display = 'none'
-
+    deadButton.style.display = 'none'
     gameGrid.removeAttribute('id')
     gameGrid.classList.add('grid')
-    deadButton.style.display = 'none'
-    snakeYPosition = Math.floor(height / 2)
-    snakeXPosition = Math.floor(width / 2)
-    snakeDirection = 'Up'
-    scoreUpdate = 0
-    num = 5
-    numTwo = 17
-    snakeLength = 5
-    updatingScore()
-    changeLevel()
+
+    init()
     theGame()
-    // AFTER GAME CALL!!!!
-    createTraps()
-    testFood()
-    //-----------------
+    handleObstacles('food')
+    handleObstacles('trap')
   }
- 
-  //!GAME LOOP 
+
 
   let maxSpeed
   let decreaseTen
@@ -251,126 +242,80 @@ function init() {
 
   function theGame(){
 
+    score.textContent = game.score
+    grid.cell[snake.y][snake.x].snake = snake.len
 
-    decreaseTen = setTimeout(theGame, 240 - (snakeLength * 10))
-    if (snakeLength >= 11  && snakeLength < 18) {
+
+    decreaseTen = setTimeout(theGame, 240 - (snake.len * 10))
+    if (snake.len >= 11  && snake.len < 18) {
       clearTimeout(decreaseTen)
-      decreaseTwo = setTimeout(theGame, 120 - (snakeLength * 2))
-    } else if (snakeLength >= 19) {
+      decreaseTwo = setTimeout(theGame, 120 - (snake.len * 2))
+    } else if (snake.len >= 19) {
       clearTimeout(decreaseTwo)
       clearTimeout(decreaseTen)
       maxSpeed = setTimeout(theGame, 65)
     }
 
-    for (let y = 0; y < height; y++) { 
-      for (let x = 0; x < width; x++){
-        if (gridArray[y][x].snake > 0) {
-          gridArray[y][x].element.setAttribute('id', 'snake-head')
-          gridArray[y][x].snake--
-        } else if (gridArray[y][x].food === 1) {
-          gridArray[y][x].element.setAttribute('id','snake-food')
-        } else if (gridArray[y][x].trap === 1) {
-          gridArray[y][x].element.setAttribute('id', 'snake-trap')
-        } else if (gridArray[y][x].laser > 0 ) {
-          gridArray[y][x].element.setAttribute('id','laser') 
-          gridArray[y][x].laser--
-        } else if (gridArray[y][x].door === 1) {
-          gridArray[y][x].element.setAttribute('id', 'doors') 
+    for (let y = 0; y < grid.h; y++) { 
+      for (let x = 0; x < grid.w; x++){
+        const cell = grid.cell[y][x]
+        if (cell.snake > 0) {
+          setAtt(cell,'snake-head')
+          cell.snake--
+        } else if (cell.food > 0) {
+          setAtt(cell,'snake-food')
+        } else if (cell.trap > 0) {
+          setAtt(cell,'snake-trap')
+        } else if (cell.laser > 0 ) {
+          setAtt(cell,'laser') 
+          cell.laser--
+        } else if (cell.door === 1) {
+          setAtt(cell,'doors') 
         } else {
-          gridArray[y][x].element.removeAttribute('id')
-    
+          cell.element.removeAttribute('id')
         } 
+
+        if (x < grid.inW || y < grid.inW || 
+          x >  grid.inH || y > grid.inH) {
+          grid.cell[y][x].door = 1
+        } else {
+          grid.cell[y][x].door = 0
+        }
+
       }
     }
-    //handling the movement of the snake, none of this is called untill triggered by a keyboard event /
-    switch (snakeDirection) {
+
+    switch (snake.dir) {
       case 'Right':
-        snakeXPosition++
+        snake.x++
         break
       case 'Left' :
-        snakeXPosition--
+        snake.x--
         break
       case 'Up' : 
-        snakeYPosition--
+        snake.y--
         break
       case 'Down': 
-        snakeYPosition++
+        snake.y++
         break
     }
-    function handleDirectionKeys(event) {
-      switch (event.key) {
-        case 'ArrowRight' :
-          if ( snakeDirection !== 'Left') {
-            snakeDirection = 'Right'
-          
-          }
-          break
-        case 'ArrowLeft': 
-          if (snakeDirection !== 'Right') {
-            snakeDirection = 'Left'
-            
-          }
-          break
-        case 'ArrowUp': 
-          if (snakeDirection !== 'Down') {
-            snakeDirection = 'Up'
-          
-          }
-          break
-        case 'ArrowDown':
-          if (snakeDirection !== 'Up') {
-            snakeDirection = 'Down'
-          }
-          break
-      }
-   
+
+    if ( snake.x < 0 || snake.x >= grid.w || snake.y < 0 || snake.y >= grid.h ||
+    grid.cell[snake.y][snake.x].trap === 1 || 
+    grid.cell[snake.y][snake.x].door === 1) {
+      deadScreen()
     }
 
-    document.addEventListener('keyup', handleDirectionKeys)
-    document.addEventListener('keydown', handleLaserPosition)
-    // -----------------------------------------------
-
-    //!LOSIING CONDITIONS
-    // making the game lose if the walls are rouched by making the numbers outside of the width and height accessible for adding a class
-    if ( snakeXPosition < 0 || snakeXPosition >= width || snakeYPosition < 0 || snakeYPosition >= height)  {
-      clearTimeout(decreaseTen)
-      clearTimeout(decreaseTwo)
-      clearTimeout(maxSpeed)
-      deadScreen()
-      updatingHighScore()
-    } else if (gridArray[snakeYPosition][snakeXPosition].snake > 0 || 
-      (gridArray[snakeYPosition][snakeXPosition].trap === 1 ) ||
-    (gridArray[snakeYPosition][snakeXPosition].door === 1 )) {
-      //making the game lose if the snake current position is going somewhere where the classlist is already set. i.e can only go somewhere that is 'blank'
-      clearTimeout(decreaseTen)
-      clearTimeout(decreaseTwo)
-      clearTimeout(maxSpeed)
-      deadScreen()
-      updatingHighScore()
+    if (grid.cell[snake.y][snake.x].food === 1) {
+      grid.cell[snake.y][snake.x].food = 0
+      snake.len++
+      game.score += 100
+      grid.inW--
+      grid.inH++
+      handleObstacles('food')
     }
-    // !WINNING CONDITIONS
-    // making game win a "point" by collecting food divs and gaining length
-    if (gridArray[snakeYPosition][snakeXPosition].food === 1) {
-      // gridArray[snakeYPosition][snakeXPosition].element.classList.remove('snake-food')
-      snakeLength++
-      scoreUpdate += 100
-      num--
-      numTwo++
-      updatingScore()
-      gridArray[snakeYPosition][snakeXPosition].food = 0
-      testFood()
-    } else if (snakeLength % 2 === 0) {
-      changeLevel()
-    }
-    gridArray[snakeYPosition][snakeXPosition].snake = snakeLength
-    // console.log( `${[snakeYPosition]} ${[snakeXPosition]}.snake = ${snakeLength}`)
   }
-
-  startButton.addEventListener('click', restartGame)
 }
+
+
 window.addEventListener('DOMContentLoaded' , init)
-
-
-
-
-// 
