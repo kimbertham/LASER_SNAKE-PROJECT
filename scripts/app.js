@@ -174,10 +174,10 @@ function init() {
 
   function laserMove() {
     const { laser } = game
-    const cell = grid.cell[laser.y][laser.x]
+    const c = grid.c[laser.y][laser.x]
 
     timers.laser = setTimeout(laserMove, 50)
-    cell.laser = 1
+    c.laser = 1
 
     switch (laser.dir) {
       case 'Right':
@@ -194,12 +194,12 @@ function init() {
         break
     }
 
-    if (cell.trap > 0) {
-      cell.trap = 0
+    if (c.trap > 0) {
+      c.trap = 0
       clearTimeout(timers.laser)
     } 
-    if (cell.door > 0 ){
-      cell.laser = 0 
+    if (c.door > 0 ){
+      c.laser = 0 
       clearTimeout(timers.laser)
     } 
     if (laser.x < 0 || laser.x >= grid.w ||
@@ -258,24 +258,25 @@ function init() {
 
     for (let y = 0; y < grid.h; y++) { 
       for (let x = 0; x < grid.w; x++){
-        const cell = grid.cell[y][x]
-        if (cell.snake > 0) {
-          setAtt(cell,'snake-head')
-          cell.snake--
-        } else if (cell.food > 0) {
-          setAtt(cell,'snake-food')
-        } else if (cell.trap > 0) {
-          setAtt(cell,'snake-trap')
-        } else if (cell.laser > 0 ) {
-          setAtt(cell,'laser') 
-          cell.laser--
-        } else if (cell.door === 1) {
-          setAtt(cell,'doors') 
+        const c = grid.cell[y][x]
+        if (c.snake > 0) {
+          setAtt(c,'snake-head')
+          c.snake--
+        } else if (c.food > 0) {
+          setAtt(c,'snake-food')
+        } else if (c.trap > 0) {
+          setAtt(c,'snake-trap')
+        } else if (c.laser > 0 ) {
+          setAtt(c,'laser') 
+          c.laser--
+        } else if (c.door === 1) {
+          setAtt(c,'doors') 
         } else {
-          cell.element.removeAttribute('id')
+          c.element.removeAttribute('id')
         } 
 
-        if (x < grid.inW || y < grid.inW || 
+        if (
+          x < grid.inW || y < grid.inW || 
           x >  grid.inH || y > grid.inH) {
           grid.cell[y][x].door = 1
         } else {
@@ -300,13 +301,16 @@ function init() {
         break
     }
 
-    if ( snake.x < 0 || snake.x >= grid.w || snake.y < 0 || snake.y >= grid.h ||
-    grid.cell[snake.y][snake.x].trap === 1 || 
-    grid.cell[snake.y][snake.x].door === 1) {
+    if ( 
+      snake.x < 0 || snake.x >= grid.w ||
+      snake.y < 0 || snake.y >= grid.h ||
+      grid.cell[snake.y][snake.x].trap === 1 || 
+      grid.cell[snake.y][snake.x].door === 1) {
       deadScreen()
     }
 
-    if (grid.cell[snake.y][snake.x].food === 1) {
+    if (
+      grid.cell[snake.y][snake.x].food === 1) {
       grid.cell[snake.y][snake.x].food = 0
       snake.len++
       game.score += 100
