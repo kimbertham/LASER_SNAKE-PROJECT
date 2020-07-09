@@ -1,6 +1,7 @@
 function init() {
 
   const gameGrid = document.querySelector('.grid')
+  const dead = document.querySelector('.dead')
   const startButton = document.querySelector('.start-button')
   const score = document.querySelector('.score')
   const deadButton = document.querySelector('.dead-button')
@@ -46,7 +47,8 @@ function init() {
     x: 0,
     y: 0,
     dir: 0,
-    len: 5
+    len: 5,
+    q: []
   }
 
   const timers = {
@@ -55,19 +57,18 @@ function init() {
   }
 
   function init ()  {
+
+
     for (let y = 0; y < grid.h; y++) { 
       for (let x = 0; x < grid.w; x++) {
         const c = grid.cell[y][x] 
-        c.snake = 0
-        c.food = 0
-        c.trap = 0
-        c.laser = 0
+        c.snake = 0, c.food = 0, c.trap = 0,c.laser = 0
       }
     }
 
     snake.y = Math.floor(grid.h / 2)
     snake.x = Math.floor(grid.w / 2)
-    snake.dir = 'Up'
+    snake.dir = 'UP',
     game.score = 0
     grid.inW = 5
     grid.inH = 17
@@ -115,31 +116,29 @@ function init() {
     while (!game[icon])
   }
 
-
   function handleDirectionKeys(event) {
+    event.preventDefault()
     switch (event.key) {
       case 'ArrowRight' :
-        if ( snake.dir !== 'Left') {
-          snake.dir = 'Right'
-        }
+        if ((snake.q.length ? snake.q[0] : snake.dir) !== 'LEFT') 
+          snake.q.unshift('RIGHT')
         break
       case 'ArrowLeft': 
-        if (snake.dir !== 'Right') {
-          snake.dir = 'Left'
-        }
+        if ((snake.q.length ? snake.q[0] : snake.dir) !== 'RIGHT') 
+          snake.q.unshift('LEFT')
         break
       case 'ArrowUp': 
-        if (snake.dir !== 'Down') {
-          snake.dir =  'Up'
-        }
+        if ((snake.q.length ? snake.q[0] : snake.dir) !== 'DOWN') 
+          snake.q.unshift('UP')
         break
       case 'ArrowDown':
-        if (snake.dir !== 'Up') {
-          snake.dir =  'Down'
-        }
+        if ((snake.q.length ? snake.q[0] : snake.dir) !== 'UP') 
+          snake.q.unshift('DOWN')
         break
     }
   }
+
+
 
   function handleLaserPosition(event){
     const { laser } = game
@@ -149,22 +148,22 @@ function init() {
       laser.x = snake.x 
 
       switch (snake.dir) {
-        case 'Right' : 
+        case 'RIGHT' : 
           laser.x = snake.x + 2
-          laser.dir = 'Right'
+          laser.dir = 'RIGHT'
           break
-        case 'Left' : 
+        case 'LEFT': 
           laser.x = snake.x - 2
-          laser.dir = 'Left'
+          laser.dir = 'LEFT'
           break
-        case 'Up' :  
+        case 'UP' :  
           laser.y = snake.y - 2
-          laser.dir = 'Up'
+          laser.dir = 'UP'
           break
-        case 'Down' : 
+        case 'DOWN' : 
           laser.y = snake.y + 2
 
-          laser.dir = 'Down'
+          laser.dir = 'DOWN'
           break
       }
       laserMove()
@@ -174,22 +173,22 @@ function init() {
 
   function laserMove() {
     const { laser } = game
-    const c = grid.c[laser.y][laser.x]
+    const c = grid.cell[laser.y][laser.x]
 
     timers.laser = setTimeout(laserMove, 50)
     c.laser = 1
 
     switch (laser.dir) {
-      case 'Right':
+      case 'RIGHT':
         laser.x++
         break
-      case 'Left' :
+      case 'LEFT' :
         laser.x--
         break
-      case 'Up' : 
+      case 'UP' : 
         laser.y--
         break
-      case 'Down': 
+      case 'DOWN': 
         laser.y++
         break
     }
@@ -218,19 +217,22 @@ function init() {
     clearTimeout(maxSpeed)
 
     gameGrid.id = 'dead-screen'
-    gameGrid.classList.remove('grid')
+    dead.style.display = 'block'
     deadButton.style.display = 'block'
   }
 
 
   function restartGame(){
 
+    dead.style.display = 'none'
     deadButton.style.display = 'none'
     gameGrid.removeAttribute('id')
     gameGrid.classList.add('grid')
+    
 
     init()
     theGame()
+    // handleTimers()
     handleObstacles('food')
     handleObstacles('trap')
   }
@@ -245,16 +247,18 @@ function init() {
     score.textContent = game.score
     grid.cell[snake.y][snake.x].snake = snake.len
 
+    decreaseTen = setTimeout(theGame, 150 - (snake.len * 5))
+    // if (snake.len >= 11  && snake.len < 18) {
+    //   clearTimeout(decreaseTen)
+    //   decreaseTwo = setTimeout(theGame, 120 - (snake.len * 2))
+    // } else if (snake.len >= 19) {
+    //   clearTimeout(decreaseTwo)
+    //   clearTimeout(decreaseTen)
+    //   maxSpeed = setTimeout(theGame, 65)
+    // }
 
-    decreaseTen = setTimeout(theGame, 240 - (snake.len * 10))
-    if (snake.len >= 11  && snake.len < 18) {
-      clearTimeout(decreaseTen)
-      decreaseTwo = setTimeout(theGame, 120 - (snake.len * 2))
-    } else if (snake.len >= 19) {
-      clearTimeout(decreaseTwo)
-      clearTimeout(decreaseTen)
-      maxSpeed = setTimeout(theGame, 65)
-    }
+
+
 
     for (let y = 0; y < grid.h; y++) { 
       for (let x = 0; x < grid.w; x++){
@@ -275,8 +279,7 @@ function init() {
           c.element.removeAttribute('id')
         } 
 
-        if (
-          x < grid.inW || y < grid.inW || 
+        if (x < grid.inW || y < grid.inW || 
           x >  grid.inH || y > grid.inH) {
           grid.cell[y][x].door = 1
         } else {
@@ -286,31 +289,34 @@ function init() {
       }
     }
 
+    if (snake.q.length)
+      snake.dir = snake.q.pop()
+
     switch (snake.dir) {
-      case 'Right':
+      case 'RIGHT':
         snake.x++
         break
-      case 'Left' :
+      case 'LEFT' :
         snake.x--
         break
-      case 'Up' : 
+      case 'UP' : 
         snake.y--
         break
-      case 'Down': 
+      case 'DOWN': 
         snake.y++
         break
     }
 
     if ( 
-      snake.x < 0 || snake.x >= grid.w ||
-      snake.y < 0 || snake.y >= grid.h ||
-      grid.cell[snake.y][snake.x].trap === 1 || 
-      grid.cell[snake.y][snake.x].door === 1) {
+      snake.x < 0 || snake.x >= grid.w || snake.y < 0 || snake.y >= grid.h ||
+      grid.cell[snake.y][snake.x].snake > 0 ||
+      grid.cell[snake.y][snake.x].trap === 1 ||
+      grid.cell[snake.y][snake.x].door === 1
+    ) {
       deadScreen()
     }
 
-    if (
-      grid.cell[snake.y][snake.x].food === 1) {
+    if (grid.cell[snake.y][snake.x].food === 1) {
       grid.cell[snake.y][snake.x].food = 0
       snake.len++
       game.score += 100

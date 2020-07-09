@@ -9,43 +9,26 @@
   <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
   <title>Snake</title>
 </head>
-<body>
+<body class="center">
 
-  <div class='instructions-wrapper'>
-  <div class='title'> </div>
-
-<div class='instructions'> 
-<h2><u>The Rules</u></h2>
-<p>The aim of the game is to feed you snake the purple grapes and grow your length!</p>
-  <p> Use your ARROW KEYS to navigate through the map</p>
-  <p> But be careful, the more you grow the faster you get! </p>
-  <p> Make sure your snake doesnt eat the poison! </p>
-  <p> Use your SPACEBAR to shoot your snake lasers and eradicate the poison!</p>
-  <p> Make sure your snake doesnt crash into the walls and hurt itself!</p>
-</div>
-</div>
-
-
-  
-
-
-
-  <div class ='grid-container'>
-  <div class='grid'>  <button class='dead-button'>Play again?</button></div>
-
+<div class='scores-container center'> 
+  <div class='scores-wrapper center'> 
+    <div class='score-text'> 
+        <p>Score:<br><span class='score'> </span></p>
+      </div>
+      <div class='score-text'>
+        <p>High Score:<br> <span class='high-score'></span></p>
+      </div>
   </div>
+  <button class='start-button'> Start Game</button>
+</div>
 
-
-  <div class='right-side'> 
-  <div class='scores-wrapper'> 
-    <div class='current-score'> 
-    <p>Score:<br><span class='score'> </span></p>
+<div class ='grid-container'>
+  <div class='dead'></div>
+  <div class='grid center'>
+    <button class='dead-button'>Play again?</button>
   </div>
-  <div class='high-scores'>
-  <p>High Score:<br> <span class='high-score'></span></p>
 </div>
-</div>
-<button class='start-button'> Start Game</button>
-</div>
+
 </body>
 </html>
