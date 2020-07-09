@@ -1,5 +1,5 @@
 function init() {
-
+  const instructions = document.querySelector('.instructions')
   const gameGrid = document.querySelector('.grid')
   const dead = document.querySelector('.dead')
   const startButton = document.querySelector('.start-button')
@@ -8,9 +8,10 @@ function init() {
   const hScore = document.querySelector('.high-score')
 
   deadButton.addEventListener('click', restartGame)
-  startButton.addEventListener('click', restartGame)
+  startButton.addEventListener('click', showIns)
   document.addEventListener('keyup', handleDirectionKeys)
   document.addEventListener('keydown', handleLaserPosition)
+  document.addEventListener('keydown', handleStart)
 
   const grid = {
     cell: [],
@@ -73,6 +74,19 @@ function init() {
     grid.inW = 5
     grid.inH = 17
     snake.len = 5
+  }
+
+  function handleStart(event) {
+    if (event.keyCode === 13) {
+      instructions.style.display = 'none'
+      startButton.style.display = 'none'
+      restartGame()
+    }
+  }
+
+  function showIns() {
+    instructions.style.display = 'block'
+    startButton.disabled = true
   }
 
 
@@ -256,7 +270,6 @@ function init() {
     //   clearTimeout(decreaseTen)
     //   maxSpeed = setTimeout(theGame, 65)
     // }
-
 
 
 

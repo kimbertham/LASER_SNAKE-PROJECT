@@ -12,7 +12,9 @@
   align-items: center;
 }
 
-
+.flex{
+  display:flex
+}
 
 body { 
   width: 95vw;
@@ -34,6 +36,8 @@ body {
 
 .grid {
   flex-wrap: wrap;
+  height: 80vh;
+  width: 50vw;
 }
 
 #snake-head {
@@ -138,3 +142,18 @@ body {
   border: 5px ridge rgb(30, 33, 133);
 }
 
+.instructions{
+  display: none;
+  position: absolute;
+  text-align: center;
+}
+
+
+.demo {
+  height:30vh;
+}
+
+.keys {
+
+  width: 10vw;
+}
