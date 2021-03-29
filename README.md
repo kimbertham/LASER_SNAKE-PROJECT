@@ -15,3 +15,6 @@ https://kimbertham.github.io/LASER_SNAKE-PROJECT/
 
 <h2> Demo </h2>
 <img src='https://i.imgur.com/s40DynM.gif' alt='demo' />
+
+<h2> Difficulties </h2>
+<p> I initially had a lot of trouble handling the movement of the snake and coordinating both the movement and directions at the same time.
