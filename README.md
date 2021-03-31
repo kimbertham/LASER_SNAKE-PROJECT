@@ -21,6 +21,33 @@ https://kimbertham.github.io/LASER_SNAKE-PROJECT/
 
 <h4>Obstacles</h4>
  <p> To create the food for the snake I generated two random numbers between 23 and and placed the food at random on the grid. At this point I realised the food would have to be placed at cells not where the snake classes were currently set as it could be potentially covered by the snake body. I wrote a do while function to ensure random numbers were generated untill coordinated that did not match any currently taken up by the snake were generated. <p>
+ ```
+  const handleObstacles = (icon) => {
+    
+    if (icon === 'trap') {
+      clearInterval(timers.traps)
+      timers.traps = setInterval(()=>{
+        handleObstacles('trap')
+      }, 10000)
+    }
+
+    do { 
+      const cell = grid.cell[ranNum()][ranNum()]
+      for (let y = 0; y < grid.h; y++) { 
+        for (let x = 0; x < grid.w; x++){
+          if ( Object.keys(cell).some(k => cell[k] === 1)) {
+            cell[icon] = false
+            game[icon] = false
+          } else {
+            cell[icon] = 1
+            game[icon] = true
+          }
+        }
+      }
+    }
+    while (!game[icon])
+  }
+  ```
  
  <h4>Point conditions</h4>
  <p> The wins and loss conditions of the games were written leading to either a increase in points or to end the game function. If the head of the snakes coordinates on the grid matched the position of the food, the food class would be removed and create function would be called again to create another. If the head touched the walls of the grid the game would end.<p>
