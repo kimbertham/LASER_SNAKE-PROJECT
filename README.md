@@ -2,9 +2,17 @@ https://kimbertham.github.io/LASER_SNAKE-PROJECT/
 
 <h1> LASERSNAKE </h1>
 
-<h2> Overview </h2>
-<p>1 Week solo Project</p>
-<p>A recreation of the classic game snake with a twist, lasers and poison. Creating over a 1 week period using pure vanilla JavaScript. Control of the snake was achieved by creating a grid and altering stlying classes to give the illusion of movement. After sucessfully creating the basic game by day 4, I decided to add in the feature of bombs and posion and altering the games win/loss conditions to fit these new obstacles. To increase difficulty with levels I decided to implement an explanding grid type design in which the available space the snake can access increases with the first three levels. The speed of the snake also increases with levels achieved by creating a direct relationship between the snake length and setTimeout value of the game.  </p>
+<h2> Brief </h2> 
+<p> Build a grid based, classic game of your choice within a 6 day time frame. It must be build using vanilla javascript without the use of frameworks or third party packages. </p>
+
+<h2> Process </h2>
+<p>A recreation of the classic game snake with a twist, lasers and poison. Creating over a 1 week period using pure vanilla JavaScript.
+
+<p> The first step was creating the actual game grid that would control the placements of the features involved in the game and placing the initial snake position t the center.
+ <p> Once the snake starting position was set I worked on handling the movements of the snake. This was achieved by adding and removing styling and classes to specific cells on the grid depending on the keys pressed by the player correspeonding to the direction of movement. </p>
+ <p> To create the food for the snake i generated two random numbers between 23 and and placed the food at random on the grid. At this point i realised the food would have to be placed at cells not where the snake classes were currently set as it could be potentially covered by the snake body. I wrote a do while function to ensure random numbers were generated untill coordinated that did not match any currently taken up by the snake were generated. <p>
+  <p> The wins and loss conditions of the games were finally written leading to either a increase in points or to end the game function. If the head of the snakes coordinates on the grid matched the position of the food, the food class would be removed and create function would be called again to create another. If the head touched the walls of the grid the game would end.<p>
+ Control of the snake was achieved by creating a grid and altering stlying classes to give the illusion of movement. After sucessfully creating the basic game by day 4, I decided to add in the feature of bombs and posion and altering the games win/loss conditions to fit these new obstacles. To increase difficulty with levels I decided to implement an explanding grid type design in which the available space the snake can access increases with the first three levels. The speed of the snake also increases with levels achieved by creating a direct relationship between the snake length and setTimeout value of the game.  </p>
 
 <section>
 <h2> Technologies <h2/>
