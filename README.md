@@ -35,6 +35,30 @@ https://kimbertham.github.io/LASER_SNAKE-PROJECT/
 <h2> Difficulties </h2>
 <ul>
 <li> <p> I initially had a lot of trouble handling the movement of the snake and coordinating both the movement, position and directions at the same time. Once i was able to match up the starting position of the movement on the grid and the direction, I found that the snake could end up eating itself if the opposite keys were pressed and the snake backed into itself or if movements leading to the snake eating else were pressed on the keys faster than the snakes next move could be shown on the DOM. This was eventually resolved by creaing an array of upcoming direction movememnts and including ternirary statements that didnt allow opposite moves. <p><li>
+ 
+ ``` 
+ function handleDirectionKeys(event) {
+    event.preventDefault()
+    switch (event.key) {
+      case 'ArrowRight' :
+        if ((snake.q.length ? snake.q[0] : snake.dir) !== 'LEFT') 
+          snake.q.unshift('RIGHT')
+        break
+      case 'ArrowLeft': 
+        if ((snake.q.length ? snake.q[0] : snake.dir) !== 'RIGHT') 
+          snake.q.unshift('LEFT')
+        break
+      case 'ArrowUp': 
+        if ((snake.q.length ? snake.q[0] : snake.dir) !== 'DOWN') 
+          snake.q.unshift('UP')
+        break
+      case 'ArrowDown':
+        if ((snake.q.length ? snake.q[0] : snake.dir) !== 'UP') 
+          snake.q.unshift('DOWN')
+        break
+    }
+  }
+ ```
 <li><p>I also had trouble keeping track of the multipe SetTimeouts and ensureing there was always a working clear function for all of them. </p></li>
  <ul>
 
