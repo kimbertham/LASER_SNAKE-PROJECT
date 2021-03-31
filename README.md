@@ -19,18 +19,43 @@ https://kimbertham.github.io/LASER_SNAKE-PROJECT/
 <h4> Game grid and snake movement</h4>
 <p> The first step was creating the actual game grid that would control the placements of the features involved in the game and placing the initial snake position at the center. Once the snake was set I worked on handling the movements of the snake. This was achieved by adding and removing styling and classes to specific cells on the grid depending on the keys pressed by the player correspeonding to the direction of movement. </p>
 
+``` 
+  for (let y = 0; y < grid.h; y++) { 
+    const rows = [] 
+    for (let x = 0; x < grid.w; x++){
+      const cell = { snake: 0, food: 0,trap: 0, laser: 0, door: 0 } 
+      cell.element = document.createElement('div')
+      gameGrid.appendChild(cell.element) 
+      rows.push(cell)
+    }
+    grid.cell.push(rows) 
+  } 
+```
+```
+    for (let y = 0; y < grid.h; y++) { 
+      for (let x = 0; x < grid.w; x++){
+        const c = grid.cell[y][x]
+        if (c.snake > 0) {
+          setAtt(c,'snake-head')
+          c.snake--
+        } else if (c.food > 0) {
+          setAtt(c,'snake-food')
+        } else if (c.trap > 0) {
+          setAtt(c,'snake-trap')
+        } else if (c.laser > 0 ) {
+          setAtt(c,'laser') 
+          c.laser--
+        } else if (c.door === 1) {
+          setAtt(c,'doors') 
+        } else {
+          c.element.removeAttribute('id')
+        } 
+ ```
+
 <h4>Obstacles</h4>
  <p> To create the food for the snake I generated two random numbers between 23 and and placed the food at random on the grid. At this point I realised the food would have to be placed at cells not where the snake classes were currently set as it could be potentially covered by the snake body. I wrote a do while function to ensure random numbers were generated untill coordinated that did not match any currently taken up by the snake were generated. <p>
  
  ```
-      const handleObstacles = (icon) => {
-    if (icon === 'trap') {
-      clearInterval(timers.traps)
-      timers.traps = setInterval(()=>{
-        handleObstacles('trap')
-      }, 10000)
-    }
-
     do { 
       const cell = grid.cell[ranNum()][ranNum()]
       for (let y = 0; y < grid.h; y++) { 
@@ -54,41 +79,6 @@ https://kimbertham.github.io/LASER_SNAKE-PROJECT/
  
  <h4> Poison and lasers</h4>
  <p> At this point I decided I would add in the poison as I had already written the function to randomly place obstacles around the grid and all was needed was to set the coordinates of these the loss conditions instead of win. As the lasers would not need to be controlled by the player I simply took the directional function of the snake and applied it to the laser which would go on in the same direction untill it would hit the walls of the grid and the classes be would be removed. Spacebar would trigger the class to be added to the same coordinates of the snake but two cells ahead in the direction of the snake head. </p>
- 
- ```
- 
-    timers.laser = setTimeout(laserMove, 50)
-    c.laser = 1
-
-    switch (laser.dir) {
-      case 'RIGHT':
-        laser.x++
-        break
-      case 'LEFT' :
-        laser.x--
-        break
-      case 'UP' : 
-        laser.y--
-        break
-      case 'DOWN': 
-        laser.y++
-        break
-    }
-
-    if (c.trap > 0) {
-      c.trap = 0
-      clearTimeout(timers.laser)
-    } 
-    if (c.door > 0 ){
-      c.laser = 0 
-      clearTimeout(timers.laser)
-    } 
-    if (laser.x < 0 || laser.x >= grid.w ||
-      laser.y < 0 || laser.y >=  grid.h ) {
-      clearTimeout(timers.laser)
-    }
-  }
-  ```
  
  <h4> Levels </h4>
 <p> To increase difficulty with levels I decided to implement an explanding grid type design in which the available space the snake can access increases with the first three levels. The speed of the snake also increases with levels achieved by creating a direct relationship between the snake length and setTimeout value of the game.</p>
