@@ -1,6 +1,8 @@
-https://kimbertham.github.io/LASER_SNAKE-PROJECT/
+
 
 <h1> LASERSNAKE </h1>
+
+Link: https://kimbertham.github.io/LASER_SNAKE-PROJECT/
 
 <h2> Brief </h2> 
 <p> Build a grid based game of your choice within a 6 day time frame. It must be build using vanilla javascript without the use of frameworks or third party packages. </p>
