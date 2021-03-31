@@ -74,7 +74,7 @@ https://kimbertham.github.io/LASER_SNAKE-PROJECT/
   }
   ```
  
-h4>Point conditions</h4>
+<h4>Point conditions</h4>
  <p> The wins and loss conditions of the games were written leading to either an increase in points or to end the game function. If the head of the snake coordinates on the grid matched the position of the food, the food class would be removed and create function would be called again to create another. If the head touched the walls of the grid the game would end. <p>
  
  <h4> Poison and lasers</h4>
@@ -133,11 +133,13 @@ h4>Point conditions</h4>
   }
  ```
 <li><p>I had trouble keeping track of the multiple SetTimeouts and ensuring there was always a working clear function for all of them. </p></li>
- <ul>
+ </ul>
 
 <h2> Wins </h2>
- <p> I found this project to be very helpful in developing my experience with problem solving as I initially had trouble separating the idea of actually moving the grid cells and adding classes to instead give the appearance of movement. This really solidified my understanding of vanilla JavaScript and really gave me a chance to grow confident in using methods and functions to manipulate the users experience. </p>
-<p> I was able to finish the basic game earlier than I thought which gave me time to experiment with adding in the poison and laser features in a way that made current code reusable across different use cases.
+<ul>
+ <li><p> I found this project to be very helpful in developing my experience with problem solving as I initially had trouble separating the idea of actually moving the grid cells and adding classes to instead give the appearance of movement. This really solidified my understanding of vanilla JavaScript and really gave me a chance to grow confident in using methods and functions to manipulate the users experience. </p></li>
+<li><p> I was able to finish the basic game earlier than I thought which gave me time to experiment with adding in the poison and laser features in a way that made current code reusable across different use cases.</li></p>
+ </ul>
  
  <h2> Bugs and Future content </h2>
  <p> Currently the game function is running on a SetTimeout functions with a speed relative to the snake length. This means after a certain increase in levels the games becomes too fast and it becomes very difficult to play. To solve this I could set a maximum speed limit after a certain point or alter the equation so the increase in speed I slower allowing for more level increases.
