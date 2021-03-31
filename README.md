@@ -6,7 +6,9 @@ https://kimbertham.github.io/LASER_SNAKE-PROJECT/
 <p> Build a grid based, classic game of your choice within a 6 day time frame. It must be build using vanilla javascript without the use of frameworks or third party packages. </p>
 
 <h2> Technologies </h2>
-<p>HTML></p>
+<p>HTML</p>
+<p>CSS</p>
+<p>JavaScript</p>
  
 <h2> Process </h2>
 <p>A recreation of the classic game snake with a twist, lasers and poison. Creating over a 1 week period using pure vanilla JavaScript.
