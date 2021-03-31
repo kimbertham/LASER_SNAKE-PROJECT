@@ -132,7 +132,14 @@ https://kimbertham.github.io/LASER_SNAKE-PROJECT/
     }
   }
  ```
-<li><p>I also had trouble keeping track of the multipe SetTimeouts and ensureing there was always a working clear function for all of them. </p></li>
+<li><p>I had trouble keeping track of the multiple SetTimeouts and ensuring there was always a working clear function for all of them. </p></li>
  <ul>
 
+<h2> Wins <h2>
+ <p> I found this project to be very helpful in developing my experience with problem solving as I intially had trouble seperating the idea of actually moving the grid cells and adding classes to instead give the appearance of movement. This really solidified my understanding of vanilla JavaScript and really gave me a chance to grow confident in using methods and functions to manipulate the users experience. </p>
+<p> I was able to finish the basic game earlier than I thought which gave me time to experiment with adding in the poison and laser features in a way that made current code reusable across different use cases.
+ 
+ <h2> Bugs and Future content </h2>
+ <p> Currently the game function is running on a SetTimeout functions with a speed relative to the snake length. This means after a certains increase in levels the games becomes too fast and it becomes very difficult to play. To solve this i could set a maximum speed limit after a certain point or alter the equation so the increase in speed i slower allowing for more level increases. 
+ 
 
