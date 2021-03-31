@@ -19,7 +19,7 @@ Link: https://kimbertham.github.io/LASER_SNAKE-PROJECT/
 <p>A recreation of the classic game snake with a twist, lasers and poison. Creating over a 1 week period using pure vanilla JavaScript.
 
 <h4> Game grid and snake movement</h4>
-<p> The first step was creating the actual game grid that would control the placements of the features involved in the game and placing the initial snake position at the center. Once the snake was set, I worked on handling the movements of the snake. This was achieved by adding and removing styling and classes to specific cells on the grid depending on the keys pressed by the player corresponding to the direction of movement. </p>
+<p> The first step was creating the actual game grid that would control the placements of the features involved in the game and placing the initial snake position at the center. Once the snake was set, I worked on handling the movements of the snake. This was achieved by adding and removing styling and classes to specific cells on the grid depending on the keys pressed corresponding to the direction of movement. </p>
 
 ``` 
   for (let y = 0; y < grid.h; y++) { 
@@ -55,7 +55,7 @@ Link: https://kimbertham.github.io/LASER_SNAKE-PROJECT/
  ```
 
 <h4>Obstacles</h4>
- <p> To create the food for the snake I generated two random numbers between 23 and placed the food at random on the grid. At this point I realised the food would have to be placed at cells not where the snake classes were currently set as it could be potentially covered by the snake body. I wrote a do while function to ensure random numbers were generated until coordinated that did not match any currently taken up by the snake were generated. <p>
+ <p> To create the food for the snake I generated two random numbers between 23 and placed the food at random on the grid. At this point I realised the food would have to be placed at cells not where the snake classes were currently set at as it could be potentially covered by the snake body. I wrote a do while function to ensure random numbers were generated until coordinates that did not match any of those currently taken up by the snake were generated. <p>
  
  ```
     do { 
@@ -77,10 +77,10 @@ Link: https://kimbertham.github.io/LASER_SNAKE-PROJECT/
   ```
  
 <h4>Point conditions</h4>
- <p> The wins and loss conditions of the games were written leading to either an increase in points or to end the game function. If the head of the snake coordinates on the grid matched the position of the food, the food class would be removed and create function would be called again to create another. If the head touched the walls of the grid the game would end. <p>
+ <p> The wins and loss conditions of the games were written leading to either an increase in score or an end to the game function. If the coordinates taken up by head of the snake matched the position of the food, the food class would be removed and the create food function would be called again to create another. If the head touched the walls of the grid the game would end and show the game over screen. <p>
  
  <h4> Poison and lasers</h4>
- <p> At this point I decided I would add in the poison as I had already written the function to randomly place obstacles around the grid and all was needed was to set the coordinates of these the loss conditions instead of win. As the lasers would not need to be controlled by the player, I simply took the directional function of the snake and applied it to the laser which would go on in the same direction until it would hit the walls of the grid and the classes be would be removed. Spacebar would trigger the class to be added to the same coordinates of the snake but two cells ahead in the direction of the snake head. </p>
+ <p> At this point I decided I would add in the poison feature as I had already written the function to randomly place obstacles around the grid and all was needed was to set the coordinates of these as loss conditions instead of win. As the lasers would not need to be controlled by the player, I simply took the directional function of the snake and applied it to the laser which would go on in the same direction until it would hit the walls of the grid and the classes be would be removed. Spacebar would trigger the class to be added to the same coordinates of the snake but two cells ahead in the direction of the snake head. </p>
  
  ```
     const c = grid.cell[laser.y][laser.x]
@@ -104,12 +104,12 @@ Link: https://kimbertham.github.io/LASER_SNAKE-PROJECT/
  ```
  
 <h4> Levels </h4>
-<p> To increase difficulty with levels I decided to implement an expanding grid type design in which the available space the snake can access increases with the first three levels. The speed of the snake also increases with levels achieved by creating a direct relationship between the snake length and setTimeout value of the game.</p>
+<p> To increase difficulty with levels I decided to implement an expanding grid type design in which the available space the snake can access increases with the first three levels. The speed of the snake also increases with levels, achieved by creating a direct relationship between the snake length and setTimeout value of the game.</p>
 
 
 <h2> Difficulties </h2>
 <ul>
-<li> <p> I initially had a lot of trouble handling the movement of the snake and coordinating both the movement, position and directions at the same time. Once i was able to match up the starting position of the movement on the grid and the direction, I found that the snake could end up eating itself if the opposite keys were pressed and the snake backed into itself or if movements leading to the snake eating else were pressed on the keys faster than the snakes next move could be shown on the DOM. This was eventually resolved by creating an array of upcoming direction movements and including ternary statements that didn’t allow opposite moves. <p><li>
+<li> <p> I initially had a lot of trouble handling the movement of the snake and coordinating both the movement, position and directions at the same time. Once i was able to match up the direction and starting position of the movement on the grid, I found that the snake could end up eating itself if the opposite keys were pressed, making the snake backed into itself or if movements leading to the snake eating else were pressed on the keys faster than the snakes next move could be shown on the DOM. This was eventually resolved by creating an array of upcoming direction movements and including ternary statements that didn’t allow opposite moves. <p><li>
  
  ``` 
  function handleDirectionKeys(event) {
@@ -139,14 +139,14 @@ Link: https://kimbertham.github.io/LASER_SNAKE-PROJECT/
 
 <h2> Wins </h2>
 <ul>
- <li><p> I found this project to be very helpful in developing my experience with problem solving as I initially had trouble separating the idea of actually moving the grid cells and adding classes to instead give the appearance of movement. This really solidified my understanding of vanilla JavaScript and really gave me a chance to grow confident in using methods and functions to manipulate the users experience. </p></li>
-<li><p> I was able to finish the basic game earlier than I thought which gave me time to experiment with adding in the poison and laser features in a way that made current code reusable across different use cases.</li></p>
+ <li><p> I found this project to be very helpful in developing my experience with problem solving as I initially had trouble separating the idea of actually moving the grid cells and adding classes to them instead to give the appearance of movement. This really solidified my understanding of vanilla JavaScript and really gave me a chance to grow confident in using methods and functions to manipulate the users experience. </p></li>
+<li><p> I was able to finish the basic game earlier than I thought which gave me time to experiment with adding in the poison and laser features in a way that made current code reusable.</li></p>
  </ul>
  
  <h2> Bugs and Future content </h2>
- <p> Currently the game function is running on a SetTimeout functions with a speed relative to the snake length. This means after a certain increase in levels the games becomes too fast and it becomes very difficult to play. To solve this I could set a maximum speed limit after a certain point or alter the equation so the increase in speed I slower allowing for more level increases.
+ <p> Currently the game function is running on a SetTimeout function with a speed relative to the snake length. This means after a certain increase in levels the games becomes too fast and it becomes very difficult to play. To solve this I could set a maximum speed limit after a certain point or alter the equation so the increase in speed is slower, allowing for more level increases.
 
 <h2> Experience and key takeaways </h2>
-<p> As my first real project, I felt that this game really pulled together all my recently learned knowledge and allowed me the chance to experiment with a lot of the concepts I was not yet sure I had fully grasped yet such as objects and for loops. It really pushed me to consider every aspect of a problem I was faced with and considering each individual step I could possibly take to solve it a issue by issue.  Working solo was also a very interesting experience for me and I found it to be very beneficial as it forced me to really understand my next steps and what I would need to research and look up to achieve it. 
+<p> As my first real project, I felt that this game really pulled together all my recently learned knowledge and allowed me the chance to experiment with a lot of the concepts I was not yet sure I had fully grasped yet such as objects and for loops. It really pushed me to consider every aspect of a problem I was faced with and consider each individual step I could possibly take to solve it a one issue at a time.  Working solo was also a very interesting experience for me and I found it to be very beneficial as it forced me to really understand my next steps and what I would need to research and look up to achieve it. </p>
  <p> My key takeaway from this project would be the importance of planning and plotting down a process before beginning the build as I feel a lot of how the game fell in to place was down to trial and error that could have been avoided if I had a better initial understanding of the steps I wanted to achieve. </p>
 
