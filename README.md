@@ -22,10 +22,13 @@ https://kimbertham.github.io/LASER_SNAKE-PROJECT/
 <h4>Obstacles</h4>
  <p> To create the food for the snake I generated two random numbers between 23 and and placed the food at random on the grid. At this point I realised the food would have to be placed at cells not where the snake classes were currently set as it could be potentially covered by the snake body. I wrote a do while function to ensure random numbers were generated untill coordinated that did not match any currently taken up by the snake were generated. <p>
  
+ <h4>Point conditions</h4>
  <p> The wins and loss conditions of the games were written leading to either a increase in points or to end the game function. If the head of the snakes coordinates on the grid matched the position of the food, the food class would be removed and create function would be called again to create another. If the head touched the walls of the grid the game would end.<p>
  
+ <h4> Poison and lasers</h4>
  <p> At this point I decided I would add in the poison as I had already written the function to randomly place obstacles around the grid and all was needed was to set the coordinates of these the loss conditions instead of win. As the lasers would not need to be controlled by the player I simply took the directional function of the snake and applied it to the laser which would go on in the same direction untill it would hit the walls of the grid and the classes be would be removed. Spacebar would trigger the class to be added to the same coordinates of the snake but two cells ahead in the direction of the snake head. </p>
  
+ <h4> Levels <h4/>
 <p> To increase difficulty with levels I decided to implement an explanding grid type design in which the available space the snake can access increases with the first three levels. The speed of the snake also increases with levels achieved by creating a direct relationship between the snake length and setTimeout value of the game.</p>
 
 
