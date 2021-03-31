@@ -13,7 +13,9 @@ https://kimbertham.github.io/LASER_SNAKE-PROJECT/
 <h2> Process </h2>
 <p>A recreation of the classic game snake with a twist, lasers and poison. Creating over a 1 week period using pure vanilla JavaScript.
 
+<h3> Game grid and snake</h3>
 <p> The first step was creating the actual game grid that would control the placements of the features involved in the game and placing the initial snake position at the center. Once the snake was set I worked on handling the movements of the snake. This was achieved by adding and removing styling and classes to specific cells on the grid depending on the keys pressed by the player correspeonding to the direction of movement. </p>
+
 
 <p> food and bombs were added to the game bu generating random numbers as their coordinates </p>
  <p> The wins and loss conditions of the games were written leading to either a increase in points or to end the game function. If the head of the snakes coordinates on the grid matched the position of the food, the food class would be removed and create function would be called again to create another. If the head touched the walls of the grid the game would end.<p>
