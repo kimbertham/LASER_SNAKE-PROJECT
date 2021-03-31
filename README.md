@@ -21,9 +21,9 @@ https://kimbertham.github.io/LASER_SNAKE-PROJECT/
 
 <h4>Obstacles</h4>
  <p> To create the food for the snake I generated two random numbers between 23 and and placed the food at random on the grid. At this point I realised the food would have to be placed at cells not where the snake classes were currently set as it could be potentially covered by the snake body. I wrote a do while function to ensure random numbers were generated untill coordinated that did not match any currently taken up by the snake were generated. <p>
+ 
  ```
-  const handleObstacles = (icon) => {
-    
+      const handleObstacles = (icon) => {
     if (icon === 'trap') {
       clearInterval(timers.traps)
       timers.traps = setInterval(()=>{
@@ -54,6 +54,41 @@ https://kimbertham.github.io/LASER_SNAKE-PROJECT/
  
  <h4> Poison and lasers</h4>
  <p> At this point I decided I would add in the poison as I had already written the function to randomly place obstacles around the grid and all was needed was to set the coordinates of these the loss conditions instead of win. As the lasers would not need to be controlled by the player I simply took the directional function of the snake and applied it to the laser which would go on in the same direction untill it would hit the walls of the grid and the classes be would be removed. Spacebar would trigger the class to be added to the same coordinates of the snake but two cells ahead in the direction of the snake head. </p>
+ 
+ ```
+ 
+    timers.laser = setTimeout(laserMove, 50)
+    c.laser = 1
+
+    switch (laser.dir) {
+      case 'RIGHT':
+        laser.x++
+        break
+      case 'LEFT' :
+        laser.x--
+        break
+      case 'UP' : 
+        laser.y--
+        break
+      case 'DOWN': 
+        laser.y++
+        break
+    }
+
+    if (c.trap > 0) {
+      c.trap = 0
+      clearTimeout(timers.laser)
+    } 
+    if (c.door > 0 ){
+      c.laser = 0 
+      clearTimeout(timers.laser)
+    } 
+    if (laser.x < 0 || laser.x >= grid.w ||
+      laser.y < 0 || laser.y >=  grid.h ) {
+      clearTimeout(timers.laser)
+    }
+  }
+  ```
  
  <h4> Levels </h4>
 <p> To increase difficulty with levels I decided to implement an explanding grid type design in which the available space the snake can access increases with the first three levels. The speed of the snake also increases with levels achieved by creating a direct relationship between the snake length and setTimeout value of the game.</p>
