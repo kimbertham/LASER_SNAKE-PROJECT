@@ -40,4 +40,5 @@ function handleDirectionKeys(event) {
           snake.q.unshift('DOWN')
         break
     }
-  }```
+  }
+  ```
