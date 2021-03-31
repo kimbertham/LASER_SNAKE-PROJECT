@@ -8,9 +8,9 @@ Link: https://kimbertham.github.io/LASER_SNAKE-PROJECT/
 <p> Build a grid based game of your choice within a 6 day time frame. It must be build using vanilla javascript without the use of frameworks or third party packages. </p>
 
 <h2> Technologies </h2>
-<p>HTML</p>
-<p>CSS</p>
-<p>JavaScript</p>
+<p>-HTML</p>
+<p>-CSS</p>
+<p>-JavaScript</p>
 
 <h2> Demo </h2>
 <img src='https://i.imgur.com/s40DynM.gif' alt='demo' />
